@@ -23,7 +23,7 @@ def main() -> None:
     runtime = {"protocol": 1, "scripts": scripts}
     runtime_path = ROOT / "dist" / "runtime.json"
     runtime_path.parent.mkdir(parents=True, exist_ok=True)
-    runtime_path.write_text(json.dumps(runtime, ensure_ascii=False, separators=(",", ":")) + "\n", "utf-8")
+    runtime_path.write_bytes((json.dumps(runtime, ensure_ascii=False, separators=(",", ":")) + "\n").encode("utf-8"))
     files = [{"name": "runtime.json", "abi": "all", "url": f"{BASE}/dist/runtime.json", "sha256": sha256(runtime_path)}]
     for abi in ("armeabi-v7a", "arm64-v8a"):
         for name in ("libcctv_h5e.so", "libcmg_decrypt.so", "libysp_keygen.so"):
@@ -36,7 +36,7 @@ def main() -> None:
     signature = private_key.sign(payload, padding.PKCS1v15(), hashes.SHA256())
     envelope = {"protocol": 1, "payload": base64.b64encode(payload).decode("ascii"),
                 "signature": base64.b64encode(signature).decode("ascii")}
-    (ROOT / "plugin.json").write_text(json.dumps(envelope, separators=(",", ":")) + "\n", "utf-8")
+    (ROOT / "plugin.json").write_bytes((json.dumps(envelope, separators=(",", ":")) + "\n").encode("utf-8"))
 
 
 if __name__ == "__main__":
