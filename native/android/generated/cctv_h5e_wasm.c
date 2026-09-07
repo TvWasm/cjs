@@ -115,7 +115,8 @@ static inline bool add_overflow(uint64_t a, uint64_t b, uint64_t* resptr) {
 #elif defined(_MSC_VER)
   return _addcarry_u64(0, a, b, resptr);
 #else
-#error "Missing implementation of __builtin_add_overflow or _addcarry_u64"
+  *resptr = a + b;
+  return *resptr < a;
 #endif
 }
 
@@ -716,15 +717,9 @@ DEFINE_TABLE_SET(externref)
 DEFINE_TABLE_FILL(funcref)
 DEFINE_TABLE_FILL(externref)
 
-#if defined(__GNUC__) || defined(__clang__)
-#define FUNC_TYPE_DECL_EXTERN_T(x) extern const char* const x
-#define FUNC_TYPE_EXTERN_T(x) const char* const x
-#define FUNC_TYPE_T(x) static const char* const x
-#else
 #define FUNC_TYPE_DECL_EXTERN_T(x) extern const char x[]
 #define FUNC_TYPE_EXTERN_T(x) const char x[]
 #define FUNC_TYPE_T(x) static const char x[]
-#endif
 
 #if (__STDC_VERSION__ < 201112L) && !defined(static_assert)
 #define static_assert(X) \

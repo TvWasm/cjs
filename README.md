@@ -13,4 +13,5 @@ Build native libraries with Android NDK r14b, then generate the signed release m
 ```powershell
 ./tools/build-native.ps1 -NdkRoot C:\android-ndk-r14b
 python ./tools/build_plugin.py
+python ./tools/verify_plugin.py
 ```
