@@ -1,0 +1,1 @@
+(function(){try{var nodes=document.querySelectorAll('video,audio');for(var i=0;i<nodes.length;i++){try{nodes[i].pause();nodes[i].removeAttribute('src');nodes[i].load();}catch(e){}}if(window.hls){try{window.hls.destroy();}catch(e){}}}catch(e){}})()
