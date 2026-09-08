@@ -13,13 +13,28 @@ provider script bundle or common decryption library.
 | [cmg.m3u](cmg.m3u) | 央视频，30 个央视/CGTN/专题频道、33 个卫视频道 | [Raw](https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.m3u) |
 | [gxtv.m3u](gxtv.m3u) | 广西平台，5 个广西频道和 CETV-1/2/4 | [Raw](https://raw.githubusercontent.com/TvWasm/cjs/main/gxtv.m3u) |
 
-这些配置用于支持 CJS protocol 4 的客户端。频道行保留 `webview://https://站点页面`
-入口，客户端按站点自动调用 CJS 脚本及对应的原生库解析播放地址。
-当前的 `cmg.cjs`、`cctv.cjs`、`gxtv.cjs` 是 JSON 版本描述文件，**不能直接作为
-M3U 的视频地址**，也未实现 `cjs://` 播放地址语法。文件内的插件地址注释仅供说明，
-实际插件目录在客户端中配置为 `https://raw.githubusercontent.com/TvWasm/cjs/main/catalog.json`。
+频道行直接使用在线 `.cjs?参数` 地址，例如：
 
-央视网和央视频的清晰度在客户端选择高、中、低档，M3U 不重复列出清晰度线路。
+```m3u
+#EXTM3U
+#EXTINF:-1 group-title="广西电视",广西综艺旅游
+https://raw.githubusercontent.com/TvWasm/cjs/main/gxtv.cjs?id=f3335975f9fe11e88bcfe41f13b60c62
+#EXTINF:-1 group-title="央视网",CCTV-1 综合
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctv1&quality=high
+#EXTINF:-1 group-title="央视频",CCTV-1 综合
+https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600001859
+```
+
+需要包含 **在线 `.cjs` 频道入口支持** 的新版 NativeWasmTv；较早的 protocol 4 客户端也需要升级。
+`id` 必填：广西使用 32 位频道编号，央视网使用 `cctv1` 等流编号，央视频使用数字 PID。
+可选 `quality=high|medium|low` 仅覆盖当前频道，不改写客户端设置；省略时使用客户端配置。
+其他查询参数会提供给站点 `main(item)` 的 `item.params`，当前三个站点只约定 `id` 和 `quality`。
+
+`.cjs` 同时保留精简版本描述功能。客户端识别此类频道地址后，从签名目录匹配站点，
+将查询参数交给对应插件，再播放插件解析出的媒体流。
+插件目录配置为 `https://raw.githubusercontent.com/TvWasm/cjs/main/catalog.json`。
+
+央视网和央视频支持高、中、低档，M3U 不重复列出清晰度线路。
 实际可用档位受频道自身限制；广西平台当前只声明一档。
 频道编号沿用应用内置列表及已提供的广西页面地址，未逐台重新验证直播可用性。
 

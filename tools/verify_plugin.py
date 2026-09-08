@@ -1,6 +1,6 @@
-import base64, hashlib, json, struct
+import base64, hashlib, json, struct, re
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, parse_qs, quote
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 ROOT=Path(__file__).resolve().parents[1]
@@ -16,6 +16,30 @@ def main():
     cat=verify(ROOT/'catalog.json'); assert len({s['id'] for s in cat['sites']})==len(cat['sites'])
     for site in cat['sites']:
         domain=site['id']; probe=json.loads(local(site['config']).read_text('utf-8'))
+        playback=site['playback']
+        for source in site['sources']:
+            assert source.startswith('https://') and source.endswith('.cjs')
+            assert json.loads(local(source).read_text('utf-8'))==probe
+            playlist=local(source).with_suffix('.m3u')
+            lines=playlist.read_text('utf-8').splitlines()
+            assert lines[0]=='#EXTM3U'
+            urls=[]; pending=False
+            for line in lines[1:]:
+                if line.startswith('#EXTINF:'):
+                    assert not pending and 'group-title="' in line
+                    pending=True
+                elif line and not line.startswith('#'):
+                    assert pending and line.split('?',1)[0]==source
+                    pending=False; urls.append(line)
+                    query=parse_qs(urlsplit(line).query,keep_blank_values=True)
+                    assert all(len(values)==1 for values in query.values())
+                    page=playback['page']
+                    for parameter,pattern in playback['parameters'].items():
+                        value=query[parameter][0]; assert re.fullmatch(pattern,value)
+                        page=page.replace('{'+parameter+'}',quote(value,safe=''))
+                    assert '{' not in page and urlsplit(page).hostname in site['hosts']
+            assert not pending and urls and len(urls)==len(set(urls))
+            print(f"verified {playlist.name}: {len(urls)} direct .cjs channels and signed routing")
         manifest=verify(local(probe['manifest']))
         assert manifest['id']==domain and manifest['version']==probe['v']
         assert len(manifest['files'])==3

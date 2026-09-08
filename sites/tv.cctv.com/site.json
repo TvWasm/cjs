@@ -12,5 +12,11 @@
     "medium": "medium",
     "low": "low"
   },
-  "entry": "main.js"
+  "entry": "main.js",
+  "playback": {
+    "page": "https://tv.cctv.com/live/{id}/",
+    "parameters": {
+      "id": "[a-zA-Z0-9]{1,64}"
+    }
+  }
 }

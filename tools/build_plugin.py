@@ -16,6 +16,7 @@ def artifact(path, name, abi):
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("--site", help="Build only this website; catalog still lists all sites")
+    parser.add_argument("--catalog-only", action="store_true", help="Publish channel entry routing without rebuilding immutable site releases")
     args=parser.parse_args()
     key=serialization.load_pem_private_key((ROOT/".signing/cjs-plugin-private.pem").read_bytes(), password=None)
     def signed(payload):
@@ -32,13 +33,17 @@ def main():
         base=f"{BASE}/sites/{site.name}"
         entry={k:cfg[k] for k in ('id','module','hosts','engine','qualities')}
         entry['config']=base+'/version.cjs'
+        entry['sources']=[f"{BASE}/{cfg['alias']}.cjs"]
+        if 'playback' in cfg: entry['playback']=cfg['playback']
         catalog.append(entry)
+        if args.catalog_only: continue
         if args.site and site.name != args.site: continue
         scripts={p.relative_to(site/'scripts').as_posix():p.read_text('utf-8').strip()
                  for p in sorted((site/'scripts').rglob('*')) if p.is_file()}
         if (site/'main.js').is_file(): scripts['main.js']=(site/'main.js').read_text('utf-8').strip()
         runtime=dict(cfg,protocol=PROTOCOL,scripts=scripts)
         runtime.pop('alias',None)
+        runtime.pop('playback',None) # Channel routing belongs to the independently signed catalog.
         dist=site/'dist'; dist.mkdir(exist_ok=True)
         runtime_path=dist/'runtime.json'; runtime_path.write_bytes(compact(runtime))
         files=[artifact(runtime_path,'runtime.json','all')]

@@ -52,6 +52,40 @@ site caches. Updating site A does not download, load or change B/C.
 
 ## Resolution contract (at most three tiers)
 
+### Online channel URL
+
+M3U channel addresses can directly use `https://.../gxtv.cjs?id=<channel-id>`;
+no `webview://` prefix is needed. `cctv.cjs?id=cctv1` selects CCTV and
+`cmg.cjs?id=600001859` selects Yangshipin. Requires a host with `.cjs` source support,
+which is an additive extension to protocol 4, not available in earlier v4 hosts.
+
+Each signed catalog site registers `sources` (online descriptor aliases) and `playback`
+(`page` URL template plus required `parameters` regex rules), owned by its `site.json`.
+The host strips the channel query before matching an exact registered descriptor URL;
+the site's canonical `config` URL is also accepted. Local paths, unregistered descriptors,
+missing/invalid required parameters, duplicate keys, fragments and URL credentials are rejected.
+Only configured GitHub accelerator prefixes are unwrapped for descriptor matching.
+
+Example Gxtv routing: `page: https://tv.gxtv.cn/channel/channelivePlay_{id}.html`,
+`parameters: {"id":"[a-fA-F0-9]{32}"}`. Expansion validates and URL-encodes parameters,
+and the expanded page must belong to this site's declared hosts. The page is an internal
+resolver input, not a browser navigation. Existing site scripts and SO releases remain usable.
+
+Site JS receives `item.source` (original channel URL), `item.params` (decoded query map),
+`item.url` (expanded resolver input), and `item.quality` (mapped selected quality).
+Optional `quality=high|medium|low` overrides just this playback; omission uses client settings.
+Yangshipin's existing async adapter consumes the expanded PID and the same quality selection.
+Other parameters do not change playback unless the corresponding site script consumes them.
+
+An existing cached catalog without this routing is refreshed once when a `.cjs` channel is
+first encountered; unknown descriptors fail with a configuration error. After routing and
+site installation are cached, channel switching performs no extra descriptor fetch. Existing
+first-frame version checks still apply. URL-result cache keys include the original source
+and its parameters, so distinct parameter sets cannot share the wrong result.
+
+Use `python tools/build_plugin.py --catalog-only` for alias/routing changes. This republishes
+the signed registry without changing immutable site runtime/SO releases or their versions.
+
 `qualities` maps the stable keys `high`, `medium`, `low` to provider values. It must have
 one to three entries and always include `high`. The UI displays only advertised keys and
 stores the user's preferred key. `main(item)` receives `item.url`, `item.name`, and

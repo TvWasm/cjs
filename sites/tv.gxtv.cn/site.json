@@ -11,5 +11,11 @@
     "high": "high"
   },
   "transformer": "gxtv-xhls-v2",
-  "entry": "main.js"
+  "entry": "main.js",
+  "playback": {
+    "page": "https://tv.gxtv.cn/channel/channelivePlay_{id}.html",
+    "parameters": {
+      "id": "[a-fA-F0-9]{32}"
+    }
+  }
 }

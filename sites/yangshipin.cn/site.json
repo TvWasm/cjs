@@ -11,5 +11,11 @@
     "high": "fhd",
     "medium": "shd",
     "low": "hd"
+  },
+  "playback": {
+    "page": "https://yangshipin.cn/tv/home?pid={id}",
+    "parameters": {
+      "id": "[0-9]{1,20}"
+    }
   }
 }
