@@ -1,0 +1,24 @@
+#EXTM3U
+# NativeWasmTv CJS protocol 4; import this M3U as an online channel source.
+# Site: tv.gxtv.cn
+# Plugin version entry (metadata only): https://raw.githubusercontent.com/TvWasm/cjs/main/gxtv.cjs
+# Catalog: https://raw.githubusercontent.com/TvWasm/cjs/main/catalog.json
+# Quality: high; the plugin currently advertises one tier
+# webview:// site URLs are resolved by the installed CJS plugin, not played as JSON.
+
+#EXTINF:-1 tvg-name="广西综艺旅游" group-title="广西电视",广西综艺旅游
+webview://https://tv.gxtv.cn/channel/channelivePlay_f3335975f9fe11e88bcfe41f13b60c62.html
+#EXTINF:-1 tvg-name="广西都市" group-title="广西电视",广西都市
+webview://https://tv.gxtv.cn/channel/channelivePlay_fdbaf085f9fe11e88bcfe41f13b60c62.html
+#EXTINF:-1 tvg-name="广西影视" group-title="广西电视",广西影视
+webview://https://tv.gxtv.cn/channel/channelivePlay_5e923d82058e11e9ba67e41f13b60c62.html
+#EXTINF:-1 tvg-name="广西新闻" group-title="广西电视",广西新闻
+webview://https://tv.gxtv.cn/channel/channelivePlay_9dfd8600075811e9ba67e41f13b60c62.html
+#EXTINF:-1 tvg-name="广西国际" group-title="广西电视",广西国际
+webview://https://tv.gxtv.cn/channel/channelivePlay_bfa17b64157f11e999f0e41f13b60c62.html
+#EXTINF:-1 tvg-name="CETV-1" group-title="广西电视",CETV-1
+webview://https://tv.gxtv.cn/channel/channelivePlay_ffa6b6e1b32b4a16a73eb3ef66f8bfc7.html
+#EXTINF:-1 tvg-name="CETV-2" group-title="广西电视",CETV-2
+webview://https://tv.gxtv.cn/channel/channelivePlay_80d0ffb42c114eaf9663708629ff0a3e.html
+#EXTINF:-1 tvg-name="CETV-4" group-title="广西电视",CETV-4
+webview://https://tv.gxtv.cn/channel/channelivePlay_67eace939278435bb4bca90800fb4225.html

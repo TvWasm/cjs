@@ -1,0 +1,48 @@
+#EXTM3U
+# NativeWasmTv CJS protocol 4; import this M3U as an online channel source.
+# Site: tv.cctv.com
+# Plugin version entry (metadata only): https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs
+# Catalog: https://raw.githubusercontent.com/TvWasm/cjs/main/catalog.json
+# Quality: high / medium / low; select in client settings
+# webview:// site URLs are resolved by the installed CJS plugin, not played as JSON.
+
+#EXTINF:-1 tvg-id="CCTV1" tvg-name="CCTV-1 综合" group-title="央视网",CCTV-1 综合
+webview://https://tv.cctv.com/live/cctv1/
+#EXTINF:-1 tvg-id="CCTV2" tvg-name="CCTV-2 财经" group-title="央视网",CCTV-2 财经
+webview://https://tv.cctv.com/live/cctv2/
+#EXTINF:-1 tvg-id="CCTV3" tvg-name="CCTV-3 综艺" group-title="央视网",CCTV-3 综艺
+webview://https://tv.cctv.com/live/cctv3/
+#EXTINF:-1 tvg-id="CCTV4" tvg-name="CCTV-4 中文国际（亚）" group-title="央视网",CCTV-4 中文国际（亚）
+webview://https://tv.cctv.com/live/cctv4/
+#EXTINF:-1 tvg-id="CCTV5" tvg-name="CCTV-5 体育" group-title="央视网",CCTV-5 体育
+webview://https://tv.cctv.com/live/cctv5/
+#EXTINF:-1 tvg-id="CCTV6" tvg-name="CCTV-6 电影" group-title="央视网",CCTV-6 电影
+webview://https://tv.cctv.com/live/cctv6/
+#EXTINF:-1 tvg-id="CCTV7" tvg-name="CCTV-7 国防军事" group-title="央视网",CCTV-7 国防军事
+webview://https://tv.cctv.com/live/cctv7/
+#EXTINF:-1 tvg-id="CCTV8" tvg-name="CCTV-8 电视剧" group-title="央视网",CCTV-8 电视剧
+webview://https://tv.cctv.com/live/cctv8/
+#EXTINF:-1 tvg-id="CCTV9" tvg-name="CCTV-9 纪录" group-title="央视网",CCTV-9 纪录
+webview://https://tv.cctv.com/live/cctvjilu/
+#EXTINF:-1 tvg-id="CCTV10" tvg-name="CCTV-10 科教" group-title="央视网",CCTV-10 科教
+webview://https://tv.cctv.com/live/cctv10/
+#EXTINF:-1 tvg-id="CCTV11" tvg-name="CCTV-11 戏曲" group-title="央视网",CCTV-11 戏曲
+webview://https://tv.cctv.com/live/cctv11/
+#EXTINF:-1 tvg-id="CCTV12" tvg-name="CCTV-12 社会与法" group-title="央视网",CCTV-12 社会与法
+webview://https://tv.cctv.com/live/cctv12/
+#EXTINF:-1 tvg-id="CCTV13" tvg-name="CCTV-13 新闻" group-title="央视网",CCTV-13 新闻
+webview://https://tv.cctv.com/live/cctv13/
+#EXTINF:-1 tvg-id="CCTV14" tvg-name="CCTV-14 少儿" group-title="央视网",CCTV-14 少儿
+webview://https://tv.cctv.com/live/cctvchild/
+#EXTINF:-1 tvg-id="CCTV15" tvg-name="CCTV-15 音乐" group-title="央视网",CCTV-15 音乐
+webview://https://tv.cctv.com/live/cctv15/
+#EXTINF:-1 tvg-id="CCTV16" tvg-name="CCTV-16 奥林匹克" group-title="央视网",CCTV-16 奥林匹克
+webview://https://tv.cctv.com/live/cctv16/
+#EXTINF:-1 tvg-id="CCTV17" tvg-name="CCTV-17 农业农村" group-title="央视网",CCTV-17 农业农村
+webview://https://tv.cctv.com/live/cctv17/
+#EXTINF:-1 tvg-id="CCTV5+" tvg-name="CCTV-5+ 体育赛事" group-title="央视网",CCTV-5+ 体育赛事
+webview://https://tv.cctv.com/live/cctv5plus/
+#EXTINF:-1 tvg-id="CCTV4E" tvg-name="CCTV-4 中文国际（欧）" group-title="央视网",CCTV-4 中文国际（欧）
+webview://https://tv.cctv.com/live/cctveurope/
+#EXTINF:-1 tvg-id="CCTV4A" tvg-name="CCTV-4 中文国际（美）" group-title="央视网",CCTV-4 中文国际（美）
+webview://https://tv.cctv.com/live/cctvamerica/
