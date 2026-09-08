@@ -1,22 +1,33 @@
-import hashlib, json, struct, re
+import argparse, hashlib, json, struct, re
 from pathlib import Path
-from urllib.parse import urlsplit, parse_qs, quote
+from urllib.parse import urlsplit, parse_qs, quote, unquote
 ROOT=Path(__file__).resolve().parents[1]
+BASE='https://raw.githubusercontent.com/TvWasm/cjs/main'
 def verify(path):
     value=json.loads(path.read_text('utf-8')); assert value['protocol']==4
     assert 'payload' not in value and 'signature' not in value
     return value
 def local(url):
-    return ROOT/urlsplit(url).path.split('/main/',1)[1]
+    clean=urlsplit(url)._replace(query='',fragment='').geturl()
+    if not clean.startswith(BASE+'/'): raise ValueError(f"URL is outside --base-url: {url}")
+    path=(ROOT/unquote(clean[len(BASE)+1:])).resolve()
+    if not path.is_relative_to(ROOT): raise ValueError(f"Path is outside --root: {url}")
+    return path
 def main():
+    global ROOT, BASE
+    parser=argparse.ArgumentParser(description="Verify online CJS artifacts against local files")
+    parser.add_argument('--root', type=Path, default=ROOT)
+    parser.add_argument('--base-url', default=BASE)
+    args=parser.parse_args(); ROOT=args.root.resolve(); BASE=args.base_url.rstrip('/')
     cat=verify(ROOT/'catalog.json'); assert len({s['id'] for s in cat['sites']})==len(cat['sites'])
     for site in cat['sites']:
         domain=site['id']; probe=json.loads(local(site['config']).read_text('utf-8'))
         playback=site['playback']
         for source in site['sources']:
-            assert source.startswith('https://') and source.endswith('.cjs')
+            assert urlsplit(source).scheme in ('http','https') and source.endswith('.cjs')
             assert json.loads(local(source).read_text('utf-8'))==probe
             playlist=local(source).with_suffix('.m3u')
+            if not playlist.is_file(): continue # Channel examples are optional for third-party repositories.
             lines=playlist.read_text('utf-8').splitlines()
             assert lines[0]=='#EXTM3U'
             urls=[]; pending=False
@@ -38,16 +49,17 @@ def main():
             print(f"verified {playlist.name}: {len(urls)} direct .cjs channels and routing")
         manifest=verify(local(probe['manifest']))
         assert manifest['id']==domain and manifest['version']==probe['v']
+        assert {(f['name'],f['abi']) for f in manifest['files']} == {('runtime.json','all'), (site['module']+'.so','armeabi-v7a'), (site['module']+'.so','arm64-v8a')}
         assert len(manifest['files'])==3
         for f in manifest['files']:
-            path=local(f['url']); assert path.is_relative_to(ROOT/'sites'/domain)
+            path=local(f['url']); assert path.is_relative_to(ROOT/'sites'/domain) and path.name==f['name']
             data=path.read_bytes(); assert hashlib.sha256(data).hexdigest()==f['sha256']
             if f['abi']=='all':
                 runtime=json.loads(data); assert runtime['id']==domain and runtime['version']==probe['v']
                 assert 1<=len(runtime['qualities'])<=3 and set(runtime['qualities']) <= {'high','medium','low'}
-                if domain=='yangshipin.cn': assert runtime['qualities']==dict(high='fhd',medium='shd',low='hd')
-                if domain=='tv.cctv.com': assert set(runtime['scripts'])=={'main.js'}
-                if domain=='tv.gxtv.cn': assert set(runtime['scripts'])=={'main.js'}
+                assert runtime['protocol']==4 and runtime['module']==site['module'] and runtime['qualities']==site['qualities']
+                assert runtime.get('jsApi','cjs-v4') in ('ku9','cjs-v4')
+                if runtime.get('entry'): assert runtime['entry'] in runtime['scripts']
             else:
                 assert f['name']==site['module']+'.so' and data[:4]==b'\x7fELF'
                 assert data[4]==(2 if f['abi']=='arm64-v8a' else 1)

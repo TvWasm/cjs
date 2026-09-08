@@ -1,5 +1,9 @@
 # CJS protocol 4 — website modules
 
+CJS extends the Ku9 JS contract with site-scoped native modules and lifecycle management.
+See the Chinese [developer guide](developer-guide.md) and [JS API](javascript-api.md) first.
+Pure JS plugins keep the existing Ku9 interface; no separate pure-JS protocol is introduced.
+
 ## Layout
 
 ```
@@ -80,7 +84,9 @@ and the expanded page must belong to this site's declared hosts. The page is an 
 resolver input, not a browser navigation. Existing site scripts and SO releases remain usable.
 
 Site JS receives `item.source` (original channel URL), `item.params` (decoded query map),
-`item.url` (expanded resolver input), and `item.quality` (mapped selected quality).
+`item.pageUrl` (expanded resolver input), and `item.quality` (mapped selected quality).
+With `jsApi: "ku9"`, `item.url` is the original channel URL, matching Ku9's parameter semantics.
+Omitted `jsApi` or `cjs-v4` preserves the old expanded-page `item.url`; existing releases are unchanged.
 Optional `quality=high|medium|low` overrides just this playback; omission uses client settings.
 Yangshipin's existing async adapter consumes the expanded PID and the same quality selection.
 Other parameters do not change playback unless the corresponding site script consumes them.
@@ -111,8 +117,13 @@ return a single `url`, optional `referer`, and site transform metadata.
 
 ## Execution interfaces
 
-The host supplies `cjs.get/post/request/md5/log`. Each resolver executes only its site's
-script. New hosts execute CCTV/Gxtv `main(item)` in bundled QuickJS on a worker thread,
+The host supplies Ku9 `get/post/request/getQuery/getCache/setCache/md5/log`; `cjs` is an alias
+for `ku9`. Both engines share the JS bootstrap and result parser. CJS caches are site-scoped,
+and `setCache` TTL uses milliseconds. URL strings, `url/playUrl/playurl/urls[0]`, and inline
+M3U8 strings or `m3u8/content` objects are supported. Generated live playlists use the
+existing Ku9 loopback server and a 2–5 second refresh cadence, cancelled on channel switch.
+These additions and `jsApi: ku9` require the updated host; protocol 4 alone is not a JS capability marker.
+Each resolver executes only its site's script. New hosts execute CCTV/Gxtv `main(item)` in bundled QuickJS on a worker thread,
 with no browser DOM. JSON parameters and these HTTP helpers retain the same contract;
 Promise jobs are supported, browser timers are not. Yangshipin's existing browser
 authorization adapter remains separate. This host-engine change requires no site SO or

@@ -1,7 +1,18 @@
 # cjs
 
-Online C/JS plugins for NativeWasmTv, isolated by website. Protocol 4 has no shared
-provider script bundle or common decryption library.
+CJS 是 **Ku9 JS 的超集**：JS 沿用 `main(item)` 和 `ku9.*`，在此基础上增加按网站隔离的
+C 原生处理、清晰度选择和在线版本管理。纯 JS 插件继续使用 Ku9，无需学习另一套 JS 协议。
+每个网站独立存放脚本和 SO，不编译通用的站点解密库。
+
+## 开发文档
+
+- [开发入门](docs/developer-guide.md)：选用 Ku9 或 CJS、网站目录、构建与在线发布。
+- [JS 接口](docs/javascript-api.md)：Ku9 兼容接口、返回格式、CJS 扩展与运行限制。
+- [安装与更新协议](docs/plugin-protocol.md)：JSON 字段、架构切换、缓存和完整性校验。
+- [Ku9 脚本示例](examples/ku9-main.js)：同一份 `main(item)` 可作为 Ku9 脚本或 CJS 站点入口。
+
+新宿主增加 `jsApi: "ku9"` 支持。已发布的三个站点 v1 保持原来的输入语义及文件内容；
+迁移自己的旧 CJS 脚本时，请按接口文档修改参数并递增站点版本。
 
 ## 在线频道配置
 
