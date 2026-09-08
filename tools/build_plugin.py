@@ -16,6 +16,12 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def artifact(name: str, abi: str, path: Path, url: str) -> dict:
+    digest = sha256(path)
+    return {"name": name, "abi": abi, "url": f"{url}?sha={digest[:16]}",
+            "sha256": digest}
+
+
 def main() -> None:
     scripts = {}
     for path in sorted((ROOT / "scripts").iterdir()):
@@ -39,12 +45,13 @@ def main() -> None:
     runtime_path = ROOT / "dist" / "runtime.json"
     runtime_path.parent.mkdir(parents=True, exist_ok=True)
     runtime_path.write_bytes((json.dumps(runtime, ensure_ascii=False, separators=(",", ":")) + "\n").encode("utf-8"))
-    files = [{"name": "runtime.json", "abi": "all", "url": f"{BASE}/dist/runtime.json", "sha256": sha256(runtime_path)}]
+    files = [artifact("runtime.json", "all", runtime_path,
+                      f"{BASE}/dist/runtime.json")]
     for abi in ("armeabi-v7a", "arm64-v8a"):
         for name in ("libcctv_h5e.so", "libcmg_decrypt.so", "libysp_keygen.so",
                      "libcjs_site.so"):
             path = ROOT / "dist" / abi / name
-            files.append({"name": name, "abi": abi, "url": f"{BASE}/dist/{abi}/{name}", "sha256": sha256(path)})
+            files.append(artifact(name, abi, path, f"{BASE}/dist/{abi}/{name}"))
     payload = json.dumps({"id": "tvwasm.cjs", "version": VERSION,
                           "minHostProtocol": PROTOCOL,
                           "maxHostProtocol": PROTOCOL, "files": files}, ensure_ascii=False,
