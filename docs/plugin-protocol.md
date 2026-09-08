@@ -3,28 +3,36 @@
 ## Layout
 
 ```
-catalog.json                   # signed registry; plugin.json is the same registry
+catalog.json                   # plain JSON registry; plugin.json is the same registry
 cmg.cjs / cctv.cjs / gxtv.cjs   # aliases for per-site version.cjs
 sites/<domain>/
   site.json                    # build settings, integer version, quality mapping
   main.js and/or scripts/      # only this site's JavaScript/templates
   native/Android.mk            # only this site's compilation and C sources
   version.cjs                  # tiny online version probe
-  plugin.json                  # signed site artifact manifest
+  plugin.json                  # site artifact manifest
   dist/runtime.json           # site's script bundle and capabilities
   dist/armeabi-v7a/<module>.so
   dist/arm64-v8a/<module>.so
 ```
 
 The registry lists `id`, allowed `hosts`, `module`, `engine`, `qualities`, and online
-`config` URL for each website. Registry and manifests use this envelope:
+`config` URL for each website. Registry and manifests are compact plain JSON:
 
 ```json
-{"protocol":4,"payload":"base64(UTF-8 JSON)","signature":"base64(RSA-SHA256(payload))"}
+{"protocol":4,"sites":[...]}
+{"protocol":4,"id":"tv.gxtv.cn","version":1,"files":[...]}
 ```
 
+There is no Base64 envelope or digital signature. File downloads retain SHA-256 integrity
+checks plus protocol/site/path/ELF compatibility checks. Whole-file hashes are checked at
+installation, not on every cold start. Build and verification tools need only Python's
+standard library. Existing runtime/SO bytes, versions and cache directories are unchanged.
+New hosts can read old envelopes (without signature verification), and rewrite cached
+catalogs once as plain JSON locally. Earlier hosts require an APK update for these manifests.
+
 `version.cjs` has `v` (positive integer), `id` (website domain), and `manifest` (online
-site manifest URL). A signed site manifest contains `id`, `version`, `files`. Exactly one
+site manifest URL). A site manifest contains `id`, `version`, `files`. Exactly one
 `runtime.json` (`abi: all`) and one `<module>.so` per supported ABI are distributed.
 Each artifact includes `name`, `abi`, HTTP(S) `url`, SHA-256 `sha256`. Runtime `id`, version,
 protocol and the ELF class/machine must match before activation. Local file/content URLs
@@ -59,7 +67,7 @@ no `webview://` prefix is needed. `cctv.cjs?id=cctv1` selects CCTV and
 `cmg.cjs?id=600001859` selects Yangshipin. Requires a host with `.cjs` source support,
 which is an additive extension to protocol 4, not available in earlier v4 hosts.
 
-Each signed catalog site registers `sources` (online descriptor aliases) and `playback`
+Each catalog site registers `sources` (online descriptor aliases) and `playback`
 (`page` URL template plus required `parameters` regex rules), owned by its `site.json`.
 The host strips the channel query before matching an exact registered descriptor URL;
 the site's canonical `config` URL is also accepted. Local paths, unregistered descriptors,
@@ -84,7 +92,7 @@ first-frame version checks still apply. URL-result cache keys include the origin
 and its parameters, so distinct parameter sets cannot share the wrong result.
 
 Use `python tools/build_plugin.py --catalog-only` for alias/routing changes. This republishes
-the signed registry without changing immutable site runtime/SO releases or their versions.
+the plain JSON registry without changing immutable site runtime/SO releases or their versions.
 
 `qualities` maps the stable keys `high`, `medium`, `low` to provider values. It must have
 one to three entries and always include `high`. The UI displays only advertised keys and
@@ -111,4 +119,4 @@ provider logic. New native interfaces require a matching host adapter/protocol e
 there is no universal provider SO or arbitrary JNI symbol rebinding.
 
 Native code executes in the application process. Website storage/release isolation and
-signature checks are not an OS process sandbox.
+file integrity checks are not an OS process sandbox.

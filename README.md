@@ -30,7 +30,7 @@ https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600001859
 可选 `quality=high|medium|low` 仅覆盖当前频道，不改写客户端设置；省略时使用客户端配置。
 其他查询参数会提供给站点 `main(item)` 的 `item.params`，当前三个站点只约定 `id` 和 `quality`。
 
-`.cjs` 同时保留精简版本描述功能。客户端识别此类频道地址后，从签名目录匹配站点，
+`.cjs` 同时保留精简版本描述功能。客户端识别此类频道地址后，从插件目录匹配站点，
 将查询参数交给对应插件，再播放插件解析出的媒体流。
 插件目录配置为 `https://raw.githubusercontent.com/TvWasm/cjs/main/catalog.json`。
 
@@ -44,7 +44,7 @@ https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600001859
 | `sites/yangshipin.cn` | `yangshipin.so` | high=fhd / medium=shd / low=hd |
 | `sites/tv.gxtv.cn` | `gxtv.so` | high (the current API exposes one stream) |
 
-Each directory owns source, build recipe, JS, version, signed manifest and ABI artifacts.
+Each directory owns source, build recipe, JS, version, plain JSON manifest and ABI artifacts.
 Yangshipin links signing and CMG decryption into one library; its intermediate static
 archive is never distributed. A new website is discovered from `sites/<domain>/site.json`.
 
@@ -59,3 +59,12 @@ python tools/verify_plugin.py
 Increase only the changed site's integer `version` before publishing changes. Do not
 rewrite already published versions. The client verifies and installs one site's runtime
 and one architecture's library, never other sites. See [protocol](docs/plugin-protocol.md).
+
+## 清单格式与完整性
+
+`catalog.json` 和各站点的 `plugin.json` 使用紧凑的明文 JSON，字段可直接查看；
+不再使用 Base64 包装、RSA 签名或签名密钥。构建工具只依赖 Python 标准库。
+下载脚本和 SO 后校验一次 `sha256`，确保内容完整；冷启动不重复计算整个文件的哈希。
+保留协议版本、站点标识、文件路径和 SO 架构检查，避免错误配置或混用 32/64 位库。
+新版客户端可读取并本地转换旧的 Base64 目录缓存，已有插件不用重新下载。
+较早的客户端不能读取新的明文清单，需要升级 APK。

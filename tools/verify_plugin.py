@@ -1,15 +1,11 @@
-import base64, hashlib, json, struct, re
+import hashlib, json, struct, re
 from pathlib import Path
 from urllib.parse import urlsplit, parse_qs, quote
-from cryptography.hazmat.primitives import hashes, serialization
-from cryptography.hazmat.primitives.asymmetric import padding
 ROOT=Path(__file__).resolve().parents[1]
-key=serialization.load_der_public_key((ROOT/'keys/cjs-plugin-public.der').read_bytes())
 def verify(path):
-    envelope=json.loads(path.read_text('utf-8')); assert envelope['protocol']==4
-    data=base64.b64decode(envelope['payload'])
-    key.verify(base64.b64decode(envelope['signature']),data,padding.PKCS1v15(),hashes.SHA256())
-    return json.loads(data)
+    value=json.loads(path.read_text('utf-8')); assert value['protocol']==4
+    assert 'payload' not in value and 'signature' not in value
+    return value
 def local(url):
     return ROOT/urlsplit(url).path.split('/main/',1)[1]
 def main():
@@ -39,7 +35,7 @@ def main():
                         page=page.replace('{'+parameter+'}',quote(value,safe=''))
                     assert '{' not in page and urlsplit(page).hostname in site['hosts']
             assert not pending and urls and len(urls)==len(set(urls))
-            print(f"verified {playlist.name}: {len(urls)} direct .cjs channels and signed routing")
+            print(f"verified {playlist.name}: {len(urls)} direct .cjs channels and routing")
         manifest=verify(local(probe['manifest']))
         assert manifest['id']==domain and manifest['version']==probe['v']
         assert len(manifest['files'])==3
