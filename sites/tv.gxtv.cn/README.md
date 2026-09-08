@@ -2,7 +2,8 @@
 
 广西网络广播电视台在线站点插件。`main.js` 负责根据
 `channelivePlay_<id>.html` 页面地址调用频道接口，返回 HLS 地址以及
-`encodingId`、`encodingKey`。`native/gxtv_xhls.c` 在本地代理中还原加密的
+`encodingId`、`encodingKey`。`native/gxtv_xhls.c` 编入通用 `libcjs_site.so`，
+在本地代理中还原加密的
 MPEG-TS PES 音视频负载，避免旧版 WebView 运行网页播放器时花屏或无声。
 
 该站点当前使用 xhls v2：密钥为 `MD5("01234568" + encodingId)`，每个被标记的

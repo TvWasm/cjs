@@ -10,7 +10,7 @@ The signed payload contains `version`, `minHostProtocol`, `maxHostProtocol`, and
 Each file entry has `name`, `abi` (`all`, `armeabi-v7a`, or `arm64-v8a`), `url`, and
 `sha256`. Protocol v2 requires exactly one `runtime.json` and these four native modules
 for the selected ABI: `libcctv_h5e.so`, `libcmg_decrypt.so`, `libysp_keygen.so`, and
-`libgxtv_xhls.so`.
+`libcjs_site.so`.
 
 The host enforces file size and name limits, verifies the envelope signature and every
 file hash, writes to a private staging directory, fsyncs each file, then atomically switches
@@ -25,7 +25,7 @@ architecture.
 `runtime.json` has a protocol number, a `scripts` object, and a `sites` array. Values are
 JavaScript or HTML templates; `{{NAME}}` placeholders are replaced by JSON-quoted data
 supplied by the host. Each site declaration contains its trusted hosts, JS entry, native
-module, and decryptor name. Channel content cannot select an arbitrary script or `.so`.
+module, and transformer name. Channel content cannot select an arbitrary script or `.so`.
 The JavaScript owns remote API and page logic. JNI is a narrow bridge to the C modules.
 
 ## Online-only site plug-ins
@@ -45,9 +45,11 @@ Site scripts may request only HTTP(S) resources through the host bridge.
 
 An entry defines `main(item)`, where `item.url` is the original online page and
 `item.name` is the channel name. The host exposes the Ku9-style methods `cjs.get`,
-`cjs.post`, `cjs.request`, and `cjs.log`. A result may contain `url`, `referer`,
-`decryptor`, `customId`, and `contentId`. The host accepts the decryptor only when it
-matches the signed site declaration.
+`cjs.post`, `cjs.request`, `cjs.md5`, and `cjs.log`. A result may contain `url`,
+`referer`, `transformer`, `transformerArgs`, and `mediaHosts`. The host accepts a
+transformer only when it matches the signed site declaration. The common native site
+module dispatches that opaque transformer name, so the shell contains no site-specific
+decryption code.
 
 Native modules run in the application process for low overhead. Signature verification and
 separate distribution isolate release ownership and make rollback atomic, but do not create

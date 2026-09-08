@@ -235,29 +235,79 @@ static int process_pes(uint8_t* ts, size_t length, size_t first,
   return 1;
 }
 
+static int hex_nibble(char value) {
+  if (value >= '0' && value <= '9') return value - '0';
+  if (value >= 'a' && value <= 'f') return value - 'a' + 10;
+  if (value >= 'A' && value <= 'F') return value - 'A' + 10;
+  return -1;
+}
+
 JNIEXPORT jboolean JNICALL
-Java_com_bu_cc_tv_NativeGxtvDecryptor_nativeDecryptInPlace(
-    JNIEnv* env, jclass type, jbyteArray input, jbyteArray aes_key, jint blocks) {
+Java_com_bu_cc_tv_NativeCjsTransformer_nativeTransformInPlace(
+    JNIEnv* env, jclass type, jbyteArray input, jstring transformer,
+    jobjectArray arguments) {
   jbyte* bytes;
-  jbyte* key_bytes;
+  const char* transformer_chars;
+  jstring key_string;
+  jstring blocks_string;
+  const char* key_chars;
+  const char* blocks_chars;
   jsize length;
+  uint8_t aes_key[16];
+  int blocks;
+  int key_index;
   uint8_t round_key[176];
   size_t offset;
   int decrypted = 0;
   (void)type;
-  if (input == NULL || aes_key == NULL || (*env)->GetArrayLength(env, aes_key) != 16
-      || blocks < 4 || blocks > 31) return JNI_FALSE;
+  if (input == NULL || transformer == NULL || arguments == NULL
+      || (*env)->GetArrayLength(env, arguments) < 2) return JNI_FALSE;
+  transformer_chars = (*env)->GetStringUTFChars(env, transformer, NULL);
+  if (transformer_chars == NULL) return JNI_FALSE;
+  if (strcmp(transformer_chars, "gxtv-xhls-v2") != 0) {
+    (*env)->ReleaseStringUTFChars(env, transformer, transformer_chars);
+    return JNI_FALSE;
+  }
+  (*env)->ReleaseStringUTFChars(env, transformer, transformer_chars);
+  key_string = (jstring)(*env)->GetObjectArrayElement(env, arguments, 0);
+  blocks_string = (jstring)(*env)->GetObjectArrayElement(env, arguments, 1);
+  if (key_string == NULL || blocks_string == NULL) return JNI_FALSE;
+  key_chars = (*env)->GetStringUTFChars(env, key_string, NULL);
+  blocks_chars = (*env)->GetStringUTFChars(env, blocks_string, NULL);
+  if (key_chars == NULL || blocks_chars == NULL || strlen(key_chars) != 32) {
+    if (key_chars != NULL) (*env)->ReleaseStringUTFChars(env, key_string, key_chars);
+    if (blocks_chars != NULL) (*env)->ReleaseStringUTFChars(env, blocks_string, blocks_chars);
+    (*env)->DeleteLocalRef(env, key_string);
+    (*env)->DeleteLocalRef(env, blocks_string);
+    return JNI_FALSE;
+  }
+  for (key_index = 0; key_index < 16; key_index++) {
+    int high = hex_nibble(key_chars[key_index * 2]);
+    int low = hex_nibble(key_chars[key_index * 2 + 1]);
+    if (high < 0 || low < 0) {
+      (*env)->ReleaseStringUTFChars(env, key_string, key_chars);
+      (*env)->ReleaseStringUTFChars(env, blocks_string, blocks_chars);
+      (*env)->DeleteLocalRef(env, key_string);
+      (*env)->DeleteLocalRef(env, blocks_string);
+      return JNI_FALSE;
+    }
+    aes_key[key_index] = (uint8_t)((high << 4) | low);
+  }
+  blocks = atoi(blocks_chars);
+  (*env)->ReleaseStringUTFChars(env, key_string, key_chars);
+  (*env)->ReleaseStringUTFChars(env, blocks_string, blocks_chars);
+  (*env)->DeleteLocalRef(env, key_string);
+  (*env)->DeleteLocalRef(env, blocks_string);
+  if (blocks < 4 || blocks > 31) return JNI_FALSE;
   length = (*env)->GetArrayLength(env, input);
   if (length < TS_SIZE || length % TS_SIZE != 0) return JNI_FALSE;
   bytes = (*env)->GetByteArrayElements(env, input, NULL);
-  key_bytes = (*env)->GetByteArrayElements(env, aes_key, NULL);
-  if (bytes == NULL || key_bytes == NULL) {
+  if (bytes == NULL) {
     if (bytes != NULL) (*env)->ReleaseByteArrayElements(env, input, bytes, JNI_ABORT);
-    if (key_bytes != NULL) (*env)->ReleaseByteArrayElements(env, aes_key, key_bytes, JNI_ABORT);
     return JNI_FALSE;
   }
-  expand_key((const uint8_t*)key_bytes, round_key);
-  (*env)->ReleaseByteArrayElements(env, aes_key, key_bytes, JNI_ABORT);
+  expand_key(aes_key, round_key);
+  memset(aes_key, 0, sizeof(aes_key));
   for (offset = 0; offset + TS_SIZE <= (size_t)length; offset += TS_SIZE) {
     uint8_t* packet = (uint8_t*)bytes + offset;
     int payload;

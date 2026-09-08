@@ -49,12 +49,20 @@ function main(item) {
         if (!customId || !contentId) {
             throw new Error("该频道缺少解密参数");
         }
+        var blockSeed = customId + contentId;
+        var blockSum = 0;
+        for (var character = 0; character < blockSeed.length; character++) {
+            blockSum += blockSeed.charCodeAt(character);
+        }
         return {
             url: String(streamUrl),
             referer: pageUrl,
-            decryptor: "gxtv-xhls-v2",
-            customId: customId,
-            contentId: contentId
+            transformer: "gxtv-xhls-v2",
+            transformerArgs: [
+                cjs.md5("01234568" + customId),
+                String(Math.max(blockSum % 32, 4))
+            ],
+            mediaHosts: ["liangtv.cn"]
         };
     }
     throw new Error("广西台接口中没有这个频道");

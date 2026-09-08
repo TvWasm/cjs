@@ -7,7 +7,7 @@ from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "2.0.0"
+VERSION = "2.1.0"
 PROTOCOL = 2
 BASE = "https://raw.githubusercontent.com/TvWasm/cjs/main"
 
@@ -32,8 +32,8 @@ def main() -> None:
             "id": "tv.gxtv.cn",
             "hosts": ["tv.gxtv.cn"],
             "entry": "sites/tv.gxtv.cn/main.js",
-            "nativeModule": "libgxtv_xhls.so",
-            "decryptor": "gxtv-xhls-v2"
+            "nativeModule": "libcjs_site.so",
+            "transformer": "gxtv-xhls-v2"
         }]
     }
     runtime_path = ROOT / "dist" / "runtime.json"
@@ -42,7 +42,7 @@ def main() -> None:
     files = [{"name": "runtime.json", "abi": "all", "url": f"{BASE}/dist/runtime.json", "sha256": sha256(runtime_path)}]
     for abi in ("armeabi-v7a", "arm64-v8a"):
         for name in ("libcctv_h5e.so", "libcmg_decrypt.so", "libysp_keygen.so",
-                     "libgxtv_xhls.so"):
+                     "libcjs_site.so"):
             path = ROOT / "dist" / abi / name
             files.append({"name": name, "abi": abi, "url": f"{BASE}/dist/{abi}/{name}", "sha256": sha256(path)})
     payload = json.dumps({"id": "tvwasm.cjs", "version": VERSION,
