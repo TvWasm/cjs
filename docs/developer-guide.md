@@ -4,6 +4,7 @@
 
 只需请求接口、拼接 URL、生成 M3U8：继续编写 Ku9 JS。
 入口是 `main(item)`，使用 `ku9.*`；无须另创纯 JS 协议，也无须构建 SO。
+新版客户端在 Android API 14–20 使用独立 QuickJS 执行在线 Ku9 JS，API 21+ 保留 WebView 路径。
 现有客户端的远程 Ku9 路径识别要求包含 `/k-web/ku9/js/`，例如：
 
 ```text
