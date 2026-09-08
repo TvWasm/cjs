@@ -10,6 +10,11 @@ CJS 的 JS 层使用 Ku9 的 `main(item)`、`ku9.*` 和返回格式。
 不承诺其他播放器的私有扩展。QuickJS 不提供 Node.js 的 `require`、`fs`、浏览器 DOM、
 `fetch` 或定时器；网络使用 `ku9.get/post/request`。第三方脚本需要的 JS 依赖应随脚本打包。
 
+兼容层也提供常用的 `atob`、`btoa` 和 `console.log/info/warn/error/debug`。
+Base64 接口遵循浏览器的二进制字符串语义：`btoa` 的字符值必须在 0–255；
+中文文本先自行转换为 UTF-8 字节。已有 WebView 实现保持原样，QuickJS 按需补齐缺失函数。
+相关真实源测试见 [Ku9 测试记录](ku9-source-tests.md)。
+
 新 CJS 站点在 `site.json` 声明：
 
 ```json

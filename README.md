@@ -8,6 +8,7 @@ C 原生处理、清晰度选择和在线版本管理。纯 JS 插件继续使�
 
 - [开发入门](docs/developer-guide.md)：选用 Ku9 或 CJS、网站目录、构建与在线发布。
 - [JS 接口](docs/javascript-api.md)：Ku9 兼容接口、返回格式、CJS 扩展与运行限制。
+- [真实 Ku9 源测试](docs/ku9-source-tests.md)：四类脚本、七个频道的解析与取流结果。
 - [安装与更新协议](docs/plugin-protocol.md)：JSON 字段、架构切换、缓存和完整性校验。
 - [Ku9 脚本示例](examples/ku9-main.js)：同一份 `main(item)` 可作为 Ku9 脚本或 CJS 站点入口。
 
