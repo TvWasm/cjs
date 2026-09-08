@@ -2,6 +2,7 @@ import base64
 import hashlib
 import json
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding
@@ -16,7 +17,7 @@ def main() -> None:
     public_key.verify(base64.b64decode(envelope["signature"]), payload, padding.PKCS1v15(), hashes.SHA256())
     manifest = json.loads(payload)
     for item in manifest["files"]:
-        relative = item["url"].split("/main/", 1)[1]
+        relative = urlsplit(item["url"]).path.split("/main/", 1)[1]
         actual = hashlib.sha256((ROOT / relative).read_bytes()).hexdigest()
         if actual != item["sha256"]:
             raise SystemExit(f"hash mismatch: {relative}")
