@@ -1,14 +1,14 @@
-# NativeWasmTv CJS online plugin protocol v2
+# NativeWasmTv CJS online plugin protocol v3
 
 The configured URL returns a UTF-8 JSON envelope:
 
 ```json
-{"protocol":2,"payload":"base64(JSON bytes)","signature":"base64(RSA-SHA256(payload))"}
+{"protocol":3,"payload":"base64(JSON bytes)","signature":"base64(RSA-SHA256(payload))"}
 ```
 
 The signed payload contains `version`, `minHostProtocol`, `maxHostProtocol`, and `files`.
 Each file entry has `name`, `abi` (`all`, `armeabi-v7a`, or `arm64-v8a`), `url`, and
-`sha256`. Protocol v2 requires exactly one `runtime.json` and these four native modules
+`sha256`. Protocol v3 requires exactly one `runtime.json` and these four native modules
 for the selected ABI: `libcctv_h5e.so`, `libcmg_decrypt.so`, `libysp_keygen.so`, and
 `libcjs_site.so`.
 
@@ -27,6 +27,19 @@ JavaScript or HTML templates; `{{NAME}}` placeholders are replaced by JSON-quote
 supplied by the host. Each site declaration contains its trusted hosts, JS entry, native
 module, and transformer name. Channel content cannot select an arbitrary script or `.so`.
 The JavaScript owns remote API and page logic. JNI is a narrow bridge to the C modules.
+
+Protocol v3 adds compact online component descriptors. `runtime.json` declares each local
+component version and descriptor URL. The host requests a descriptor at most once per app
+process, when a channel first needs that component:
+
+```json
+{"v":1,"id":"gxtv","manifest":"https://raw.githubusercontent.com/TvWasm/cjs/main/plugin.json"}
+```
+
+The root descriptors are `cmg.cjs`, `cctv.cjs`, and `gxtv.cjs`. The host may add a cache
+query parameter, following the same URL pattern as Ku9. A higher `v` triggers retrieval of
+the referenced signed manifest. Descriptor content is never executed directly; the host
+still verifies the RSA signature and every artifact SHA-256 before atomic activation.
 
 ## Online-only site plug-ins
 

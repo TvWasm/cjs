@@ -7,9 +7,10 @@ from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "2.1.1"
-PROTOCOL = 2
+VERSION = "2.2.0"
+PROTOCOL = 3
 BASE = "https://raw.githubusercontent.com/TvWasm/cjs/main"
+COMPONENT_VERSIONS = {"cmg": 1, "cctv": 1, "gxtv": 1}
 
 
 def sha256(path: Path) -> str:
@@ -33,9 +34,14 @@ def main() -> None:
             scripts[f"sites/{site_dir.name}/main.js"] = entry.read_text("utf-8").strip()
     runtime = {
         "protocol": PROTOCOL,
+        "components": {
+            name: {"version": version, "config": f"{BASE}/{name}.cjs"}
+            for name, version in COMPONENT_VERSIONS.items()
+        },
         "scripts": scripts,
         "sites": [{
             "id": "tv.gxtv.cn",
+            "component": "gxtv",
             "hosts": ["tv.gxtv.cn"],
             "entry": "sites/tv.gxtv.cn/main.js",
             "nativeModule": "libcjs_site.so",
@@ -45,6 +51,10 @@ def main() -> None:
     runtime_path = ROOT / "dist" / "runtime.json"
     runtime_path.parent.mkdir(parents=True, exist_ok=True)
     runtime_path.write_bytes((json.dumps(runtime, ensure_ascii=False, separators=(",", ":")) + "\n").encode("utf-8"))
+    for name, version in COMPONENT_VERSIONS.items():
+        descriptor = {"v": version, "id": name, "manifest": f"{BASE}/plugin.json"}
+        (ROOT / f"{name}.cjs").write_bytes(
+            (json.dumps(descriptor, separators=(",", ":")) + "\n").encode("utf-8"))
     files = [artifact("runtime.json", "all", runtime_path,
                       f"{BASE}/dist/runtime.json")]
     for abi in ("armeabi-v7a", "arm64-v8a"):
