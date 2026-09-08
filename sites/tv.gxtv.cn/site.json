@@ -1,0 +1,15 @@
+{
+  "id": "tv.gxtv.cn",
+  "module": "gxtv",
+  "alias": "gxtv",
+  "version": 1,
+  "hosts": [
+    "tv.gxtv.cn"
+  ],
+  "engine": "gxtv-xhls-v2",
+  "qualities": {
+    "high": "high"
+  },
+  "transformer": "gxtv-xhls-v2",
+  "entry": "main.js"
+}

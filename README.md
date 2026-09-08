@@ -1,21 +1,26 @@
 # cjs
 
-`cjs` publishes the optional C and JavaScript compatibility plugin used by NativeWasmTv.
-The C modules are wasm2c builds for fast decryption/signing on old Android devices. The
-JavaScript bundle owns provider requests, page hooks and interface logic.
+Online C/JS plugins for NativeWasmTv, isolated by website. Protocol 4 has no shared
+provider script bundle or common decryption library.
 
-Site plug-ins live under `sites/<domain>/`. The protocol accepts signed online HTTP(S)
-manifests only; it has no local-script, external-storage, `file://`, or `content://`
-installation path.
+| Site directory | Native library | Quality tiers |
+| --- | --- | --- |
+| `sites/tv.cctv.com` | `cctv.so` | high / medium / low (HLS renditions) |
+| `sites/yangshipin.cn` | `yangshipin.so` | high=fhd / medium=shd / low=hd |
+| `sites/tv.gxtv.cn` | `gxtv.so` | high (the current API exposes one stream) |
 
-The app and plugin communicate through the signed protocol in
-[`docs/plugin-protocol.md`](docs/plugin-protocol.md). NativeWasmTv does not package these
-provider modules and never contacts the plugin URL during application cold start.
-
-Build native libraries with Android NDK r14b, then generate the signed release manifest:
+Each directory owns source, build recipe, JS, version, signed manifest and ABI artifacts.
+Yangshipin links signing and CMG decryption into one library; its intermediate static
+archive is never distributed. A new website is discovered from `sites/<domain>/site.json`.
 
 ```powershell
 ./tools/build-native.ps1 -NdkRoot C:\android-ndk-r14b
-python ./tools/build_plugin.py
-python ./tools/verify_plugin.py
+# Or build one site only:
+./tools/build-native.ps1 -NdkRoot C:\android-ndk-r14b -Site tv.gxtv.cn
+python tools/build_plugin.py --site tv.gxtv.cn
+python tools/verify_plugin.py
 ```
+
+Increase only the changed site's integer `version` before publishing changes. Do not
+rewrite already published versions. The client verifies and installs one site's runtime
+and one architecture's library, never other sites. See [protocol](docs/plugin-protocol.md).

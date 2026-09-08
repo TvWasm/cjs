@@ -1,0 +1,15 @@
+{
+  "id": "yangshipin.cn",
+  "module": "yangshipin",
+  "alias": "cmg",
+  "version": 1,
+  "hosts": [
+    "yangshipin.cn"
+  ],
+  "engine": "legacy-ysp",
+  "qualities": {
+    "high": "fhd",
+    "medium": "shd",
+    "low": "hd"
+  }
+}

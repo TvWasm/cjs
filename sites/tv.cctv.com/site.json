@@ -1,0 +1,16 @@
+{
+  "id": "tv.cctv.com",
+  "module": "cctv",
+  "alias": "cctv",
+  "version": 1,
+  "hosts": [
+    "tv.cctv.com"
+  ],
+  "engine": "hls",
+  "qualities": {
+    "high": "high",
+    "medium": "medium",
+    "low": "low"
+  },
+  "entry": "main.js"
+}

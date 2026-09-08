@@ -257,7 +257,7 @@ static int hex_nibble(char value) {
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_bu_cc_tv_NativeCjsTransformer_nativeTransformInPlace(
+Java_com_bu_cc_tv_NativeGxtvTransformer_nativeTransformInPlace(
     JNIEnv* env, jclass type, jbyteArray input, jstring transformer,
     jobjectArray arguments) {
   jbyte* bytes;
