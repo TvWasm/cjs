@@ -112,7 +112,11 @@ return a single `url`, optional `referer`, and site transform metadata.
 ## Execution interfaces
 
 The host supplies `cjs.get/post/request/md5/log`. Each resolver executes only its site's
-script. Gxtv returns its declared transformer, arguments and allowed media hosts; its own
+script. New hosts execute CCTV/Gxtv `main(item)` in bundled QuickJS on a worker thread,
+with no browser DOM. JSON parameters and these HTTP helpers retain the same contract;
+Promise jobs are supported, browser timers are not. Yangshipin's existing browser
+authorization adapter remains separate. This host-engine change requires no site SO or
+script version bump. Gxtv returns its declared transformer, arguments and allowed media hosts; its own
 JNI bridge invokes `gxtv.so`. CCTV's H5E JNI invokes `cctv.so`; both Yangshipin signing and
 CMG JNI entry points live in `yangshipin.so`. JNI declarations are host ABI adapters, not
 provider logic. New native interfaces require a matching host adapter/protocol extension;
