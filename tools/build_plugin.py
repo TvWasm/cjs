@@ -7,7 +7,7 @@ from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "2.1.0"
+VERSION = "2.1.1"
 PROTOCOL = 2
 BASE = "https://raw.githubusercontent.com/TvWasm/cjs/main"
 

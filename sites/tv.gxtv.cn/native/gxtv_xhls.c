@@ -46,14 +46,28 @@ static const uint8_t sbox[256] = {
 static const uint8_t rcon[11] =
     {0x00,0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80,0x1b,0x36};
 
-static uint8_t multiply(uint8_t x, uint8_t y) {
-  uint8_t result = 0;
-  while (y) {
-    if (y & 1) result ^= x;
-    x = (uint8_t)((x << 1) ^ ((x & 0x80) ? 0x1b : 0));
-    y >>= 1;
-  }
-  return result;
+static uint8_t xtime(uint8_t x) {
+  return (uint8_t)((x << 1) ^ ((x & 0x80) ? 0x1b : 0));
+}
+
+static uint8_t mul9(uint8_t x) {
+  uint8_t x2 = xtime(x), x4 = xtime(x2), x8 = xtime(x4);
+  return (uint8_t)(x8 ^ x);
+}
+
+static uint8_t mul11(uint8_t x) {
+  uint8_t x2 = xtime(x), x4 = xtime(x2), x8 = xtime(x4);
+  return (uint8_t)(x8 ^ x2 ^ x);
+}
+
+static uint8_t mul13(uint8_t x) {
+  uint8_t x2 = xtime(x), x4 = xtime(x2), x8 = xtime(x4);
+  return (uint8_t)(x8 ^ x4 ^ x);
+}
+
+static uint8_t mul14(uint8_t x) {
+  uint8_t x2 = xtime(x), x4 = xtime(x2), x8 = xtime(x4);
+  return (uint8_t)(x8 ^ x4 ^ x2);
 }
 
 static void expand_key(const uint8_t key[16], uint8_t round_key[176]) {
@@ -100,10 +114,10 @@ static void inv_mix_columns(uint8_t s[16]) {
   for (column = 0; column < 4; column++) {
     uint8_t* a = s + column * 4;
     uint8_t x0=a[0],x1=a[1],x2=a[2],x3=a[3];
-    a[0]=(uint8_t)(multiply(x0,14)^multiply(x1,11)^multiply(x2,13)^multiply(x3,9));
-    a[1]=(uint8_t)(multiply(x0,9)^multiply(x1,14)^multiply(x2,11)^multiply(x3,13));
-    a[2]=(uint8_t)(multiply(x0,13)^multiply(x1,9)^multiply(x2,14)^multiply(x3,11));
-    a[3]=(uint8_t)(multiply(x0,11)^multiply(x1,13)^multiply(x2,9)^multiply(x3,14));
+    a[0]=(uint8_t)(mul14(x0)^mul11(x1)^mul13(x2)^mul9(x3));
+    a[1]=(uint8_t)(mul9(x0)^mul14(x1)^mul11(x2)^mul13(x3));
+    a[2]=(uint8_t)(mul13(x0)^mul9(x1)^mul14(x2)^mul11(x3));
+    a[3]=(uint8_t)(mul11(x0)^mul13(x1)^mul9(x2)^mul14(x3));
   }
 }
 
