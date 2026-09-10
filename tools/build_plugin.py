@@ -4,7 +4,7 @@ from urllib.parse import urlsplit
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "https://raw.githubusercontent.com/TvWasm/cjs/main"
-PROTOCOL = 4
+PROTOCOL = 5
 
 def compact(value):
     return (json.dumps(value, ensure_ascii=False, separators=(",", ":")) + "\n").encode("utf-8")
@@ -59,15 +59,17 @@ def main():
         dist=site/'dist'
         runtime_path=dist/'runtime.json'; runtime_bytes=compact(runtime)
         files=[artifact(runtime_path,'runtime.json','all',runtime_bytes)]
-        for abi in ('armeabi-v7a','arm64-v8a'):
+        for profile in json.loads((ROOT/'native/profiles.json').read_text('utf-8')):
             library=cfg['module']+'.so'
-            files.append(artifact(dist/abi/library,library,abi))
+            item=artifact(dist/profile['directory']/library,library,profile['abi'])
+            item.update(profile=profile['id'], minSdk=profile['minSdk'], ndk=profile['ndk'])
+            files.append(item)
         manifest=dict(protocol=PROTOCOL,id=site.name,version=cfg['version'],files=files)
         previous=site/'plugin.json'
         if previous.is_file():
             old=json.loads(previous.read_text('utf-8'))
             old_version=old['version']
-            fingerprint=lambda items: {(f['name'],f['abi']):f['sha256'] for f in items}
+            fingerprint=lambda items: {(f['name'],f['abi'],f.get('profile')):f['sha256'] for f in items}
             if cfg['version'] < old_version or (cfg['version'] == old_version and fingerprint(old['files']) != fingerprint(files)):
                 raise ValueError(f"{site.name}: increase version before changing published script/SO bytes")
         outputs[runtime_path]=runtime_bytes
@@ -82,5 +84,5 @@ def main():
     for path, data in outputs.items():
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(data)
-    print('Built protocol 4 catalog and independent site manifests')
+    print('Built protocol 5 catalog and independent site manifests')
 if __name__=='__main__': main()

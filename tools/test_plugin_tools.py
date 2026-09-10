@@ -21,6 +21,8 @@ class PublishingTests(unittest.TestCase):
         for name in ('site.json', 'main.js', 'plugin.json'):
             shutil.copy2(original / name, self.site / name)
         shutil.copytree(original / 'dist', self.site / 'dist')
+        (self.root/'native').mkdir()
+        shutil.copy2(ROOT/'native/profiles.json',self.root/'native/profiles.json')
         self.base = 'https://plugins.example.test/releases/stable'
 
     def tool(self, name, *args, success=True):
@@ -56,7 +58,7 @@ class PublishingTests(unittest.TestCase):
 
     def test_corrupt_artifact_is_rejected(self):
         self.tool('build_plugin.py')
-        (self.site / 'dist/armeabi-v7a/cctv.so').write_bytes(b'truncated')
+        (self.site / 'dist/armv7-perf/cctv.so').write_bytes(b'truncated')
         self.tool('verify_plugin.py', success=False)
 
     def test_manifest_cannot_escape_root(self):

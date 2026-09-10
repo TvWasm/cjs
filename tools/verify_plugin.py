@@ -4,7 +4,7 @@ from urllib.parse import urlsplit, parse_qs, quote, unquote
 ROOT=Path(__file__).resolve().parents[1]
 BASE='https://raw.githubusercontent.com/TvWasm/cjs/main'
 def verify(path):
-    value=json.loads(path.read_text('utf-8')); assert value['protocol']==4
+    value=json.loads(path.read_text('utf-8')); assert value['protocol']==5
     assert 'payload' not in value and 'signature' not in value
     return value
 def local(url):
@@ -49,20 +49,25 @@ def main():
             print(f"verified {playlist.name}: {len(urls)} direct .cjs channels and routing")
         manifest=verify(local(probe['manifest']))
         assert manifest['id']==domain and manifest['version']==probe['v']
-        assert {(f['name'],f['abi']) for f in manifest['files']} == {('runtime.json','all'), (site['module']+'.so','armeabi-v7a'), (site['module']+'.so','arm64-v8a')}
-        assert len(manifest['files'])==3
+        profiles=json.loads((ROOT/'native/profiles.json').read_text('utf-8'))
+        expected={('runtime.json','all',None)} | {(site['module']+'.so',p['abi'],p['id']) for p in profiles}
+        assert {(f['name'],f['abi'],f.get('profile')) for f in manifest['files']} == expected
+        assert len(manifest['files'])==4
         for f in manifest['files']:
             path=local(f['url']); assert path.is_relative_to(ROOT/'sites'/domain) and path.name==f['name']
             data=path.read_bytes(); assert hashlib.sha256(data).hexdigest()==f['sha256']
             if f['abi']=='all':
                 runtime=json.loads(data); assert runtime['id']==domain and runtime['version']==probe['v']
                 assert 1<=len(runtime['qualities'])<=3 and set(runtime['qualities']) <= {'high','medium','low'}
-                assert runtime['protocol']==4 and runtime['module']==site['module'] and runtime['qualities']==site['qualities']
+                assert runtime['protocol']==5 and runtime['module']==site['module'] and runtime['qualities']==site['qualities']
                 assert runtime.get('jsApi','cjs-v4') in ('ku9','cjs-v4')
                 if runtime.get('entry'): assert runtime['entry'] in runtime['scripts']
             else:
+                profile=next(p for p in profiles if p['id']==f['profile'])
+                assert f['minSdk']==profile['minSdk'] and f['ndk']==profile['ndk'] and f['abi']==profile['abi']
+                assert path.parent.name==profile['directory']
                 assert f['name']==site['module']+'.so' and data[:4]==b'\x7fELF'
                 assert data[4]==(2 if f['abi']=='arm64-v8a' else 1)
                 assert struct.unpack_from('<H',data,18)[0]==(183 if f['abi']=='arm64-v8a' else 40)
-        print(f"verified {domain} v{probe['v']}: independent script + 2 ABI libraries")
+        print(f"verified {domain} v{probe['v']}: independent script + 3 native profiles")
 if __name__=='__main__': main()

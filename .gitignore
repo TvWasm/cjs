@@ -1,3 +1,8 @@
 .signing/
 build/
 *.log
+
+# Local experiments and Python caches
+.codex-tmp/
+__pycache__/
+*.py[cod]

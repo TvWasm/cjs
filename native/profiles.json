@@ -1,0 +1,23 @@
+[
+  {
+    "id": "armv7-base",
+    "abi": "armeabi-v7a",
+    "minSdk": 14,
+    "ndk": "r17c",
+    "directory": "armeabi-v7a"
+  },
+  {
+    "id": "armv7-perf",
+    "abi": "armeabi-v7a",
+    "minSdk": 19,
+    "ndk": "r25c",
+    "directory": "armv7-perf"
+  },
+  {
+    "id": "arm64",
+    "abi": "arm64-v8a",
+    "minSdk": 21,
+    "ndk": "r30",
+    "directory": "arm64-v8a"
+  }
+]

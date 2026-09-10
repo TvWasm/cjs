@@ -12,8 +12,8 @@ C 原生处理、清晰度选择和在线版本管理。纯 JS 插件继续使�
 - [安装与更新协议](docs/plugin-protocol.md)：JSON 字段、架构切换、缓存和完整性校验。
 - [Ku9 脚本示例](examples/ku9-main.js)：同一份 `main(item)` 可作为 Ku9 脚本或 CJS 站点入口。
 
-新宿主增加 `jsApi: "ku9"` 支持。已发布的三个站点 v1 保持原来的输入语义及文件内容；
-迁移自己的旧 CJS 脚本时，请按接口文档修改参数并递增站点版本。
+当前内测协议为 **5**，按 Android API 与应用进程架构选择三种原生包。
+JS 仍兼容 Ku9，已有 `cjs-v4` 参数语义不变。详见 [三档原生包及实测](docs/native-profiles-v5.md)。
 
 ## 在线频道配置
 
@@ -61,9 +61,9 @@ Yangshipin links signing and CMG decryption into one library; its intermediate s
 archive is never distributed. A new website is discovered from `sites/<domain>/site.json`.
 
 ```powershell
-./tools/build-native.ps1 -NdkRoot C:\android-ndk-r14b
+./tools/build-native.ps1 -NdkDirectory D:\android\sdk\ndk
 # Or build one site only:
-./tools/build-native.ps1 -NdkRoot C:\android-ndk-r14b -Site tv.gxtv.cn
+./tools/build-native.ps1 -NdkDirectory D:\android\sdk\ndk -Site tv.gxtv.cn
 python tools/build_plugin.py --site tv.gxtv.cn
 python tools/verify_plugin.py
 ```
@@ -78,5 +78,5 @@ and one architecture's library, never other sites. See [protocol](docs/plugin-pr
 不再使用 Base64 包装、RSA 签名或签名密钥。构建工具只依赖 Python 标准库。
 下载脚本和 SO 后校验一次 `sha256`，确保内容完整；冷启动不重复计算整个文件的哈希。
 保留协议版本、站点标识、文件路径和 SO 架构检查，避免错误配置或混用 32/64 位库。
-新版客户端可读取并本地转换旧的 Base64 目录缓存，已有插件不用重新下载。
-较早的客户端不能读取新的明文清单，需要升级 APK。
+协议 5 使用独立缓存，旧协议缓存不会混用；首次访问各站点时下载对应新包。
+必须先升级支持协议 5 的 APK，再使用协议 5 目录；请使用配套的协议 5 客户端。

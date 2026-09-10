@@ -1,4 +1,4 @@
-# CJS protocol 4 — website modules
+# CJS protocol 5 — website modules
 
 CJS extends the Ku9 JS contract with site-scoped native modules and lifecycle management.
 See the Chinese [developer guide](developer-guide.md) and [JS API](javascript-api.md) first.
@@ -16,29 +16,32 @@ sites/<domain>/
   version.cjs                  # tiny online version probe
   plugin.json                  # site artifact manifest
   dist/runtime.json           # site's script bundle and capabilities
-  dist/armeabi-v7a/<module>.so
-  dist/arm64-v8a/<module>.so
+  dist/armeabi-v7a/<module>.so   # API 14+, r17c Clang
+  dist/armv7-perf/<module>.so   # API 19+, r25c Clang
+  dist/arm64-v8a/<module>.so       # API 21+, r30 Clang
 ```
 
 The registry lists `id`, allowed `hosts`, `module`, `engine`, `qualities`, and online
 `config` URL for each website. Registry and manifests are compact plain JSON:
 
 ```json
-{"protocol":4,"sites":[...]}
-{"protocol":4,"id":"tv.gxtv.cn","version":1,"files":[...]}
+{"protocol":5,"sites":[...]}
+{"protocol":5,"id":"tv.gxtv.cn","version":1,"files":[...]}
 ```
 
 There is no Base64 envelope or digital signature. File downloads retain SHA-256 integrity
 checks plus protocol/site/path/ELF compatibility checks. Whole-file hashes are checked at
 installation, not on every cold start. Build and verification tools need only Python's
-standard library. Existing runtime/SO bytes, versions and cache directories are unchanged.
-New hosts can read old envelopes (without signature verification), and rewrite cached
-catalogs once as plain JSON locally. Earlier hosts require an APK update for these manifests.
+standard library. Protocol 5 requires an updated host and a new cache namespace.
+Protocol 4 caches and Base64 envelopes are not loaded. See [native profiles](native-profiles-v5.md).
 
 `version.cjs` has `v` (positive integer), `id` (website domain), and `manifest` (online
 site manifest URL). A site manifest contains `id`, `version`, `files`. Exactly one
-`runtime.json` (`abi: all`) and one `<module>.so` per supported ABI are distributed.
-Each artifact includes `name`, `abi`, HTTP(S) `url`, SHA-256 `sha256`. Runtime `id`, version,
+`runtime.json` (`abi: all`) and one `<module>.so` per native profile are distributed.
+Each artifact includes `name`, `abi`, HTTP(S) `url`, SHA-256 `sha256`.
+Native entries additionally declare `profile`, `minSdk`, and build provenance `ndk`.
+The runtime entry has `abi: all` and no profile. The host downloads only runtime + its
+selected native profile, checks the exact profile/API/ABI combination, and writes `profile.txt`. Runtime `id`, version,
 protocol and the ELF class/machine must match before activation. Local file/content URLs
 and local script uploads are not plugin installation entry points.
 
@@ -52,13 +55,13 @@ use and permits retry on a subsequent visit. Explicit update checks only install
 the settings page can independently download/update any configured site.
 
 State, files, pending updates, and in-memory script/native handles are keyed by **site +
-process ABI**. Data is staged and verified before directory rename and preference switch.
+native profile**. Data is staged and verified before directory rename and preference switch.
 A site becomes pinned as soon as its scripts or native library are used; a newer version
 waits for a new process. Other sites remain usable and may update independently. Pending
 versions are validated before activation; a damaged pending download keeps the old active
 version. Network requests never hold the runtime monitor used by UI and playback.
 
-Protocol 3 caches are left alone and never loaded by protocol 4. Only the first requested
+Protocol 4 caches are left alone and never loaded by protocol 5. Only the first requested
 site is downloaded to the new namespace. Changing between 32/64-bit APKs selects independent
 site caches. Updating site A does not download, load or change B/C.
 

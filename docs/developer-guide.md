@@ -24,8 +24,9 @@ sites/tv.example.test/
   scripts/                   # 可选模板/辅助资源；不会自动 require
   native/Android.mk          # 此网站自己的 C/WASM 转 C 源码与构建规则
   dist/runtime.json          # 构建生成，含脚本正文
-  dist/armeabi-v7a/example.so
-  dist/arm64-v8a/example.so
+  dist/armeabi-v7a/example.so  # r17c / API 14+
+  dist/armv7-perf/example.so  # r25c / API 19+
+  dist/arm64-v8a/example.so      # r30 / API 21+
   version.cjs                # 构建生成：小版本探针
   plugin.json                # 构建生成：文件与 SHA-256
 example.cjs                  # 构建生成：在线频道别名，内容是 JSON 描述符
@@ -59,7 +60,7 @@ catalog.json                 # 构建生成：所有网站的目录
 | 字段 | 填写规则 |
 | --- | --- |
 | `id` | 网站标识，与 `sites` 下目录名完全一致 |
-| `module` | 不带 `.so` 后缀的独立原生模块名，发布两种架构 |
+| `module` | 不带 `.so` 后缀的独立原生模块名，发布三种原生包 |
 | `alias` | 根目录 `.cjs` 文件名，不带后缀；仓库内唯一 |
 | `version` | 正整数；脚本、运行配置或 SO 内容改变就递增 |
 | `hosts` | 展开后网页所属的域名；不含协议和路径 |
@@ -79,7 +80,8 @@ catalog.json                 # 构建生成：所有网站的目录
 
 参考 `sites/tv.cctv.com/native`、`sites/yangshipin.cn/native`、`sites/tv.gxtv.cn/native`。
 各自输出 `cctv.so`、`yangshipin.so`、`gxtv.so`；不要合并为一个网站通用库。
-目前协议 4 网站包发布脚本和两个 ABI 的库，客户端只下载自身 ABI。
+协议 5 网站包发布公共脚本和三种原生包，客户端按 API 与进程 ABI 只下载一份 SO。
+详见 [选择规则及实测](native-profiles-v5.md)。
 
 文件安装和网站隔离是通用能力；**原生函数/媒体变换 ABI 仍需要宿主适配器**。
 新算法不能只上传任意 SO 就执行。新增适配器后，脚本和该网站的 C 实现可独立在线更新；
@@ -88,10 +90,12 @@ SO 运行在应用进程中，目录隔离不等于操作系统沙箱，原生�
 
 ## 构建与发布
 
-工具使用 Python 3.9+ 标准库。现有原生工程使用 NDK r14b，按网站构建：
+工具使用 Python 3.9+ 标准库。原生工程统一使用 Clang。NDK 父目录下分别放置 `android-ndk-r17c`、
+`android-ndk-r25c`、`android-ndk-r30`；`native/profiles.json` 定义三档构建配置：
 
 ```powershell
-./tools/build-native.ps1 -NdkRoot C:\android-ndk-r14b -Site tv.gxtv.cn
+./tools/build-native.ps1 -NdkDirectory D:\android\sdk\ndk -Site tv.gxtv.cn
+# 不指定 Site 构建所有站点；可加 -Profile armv7-perf 仅重建一档
 python tools/build_plugin.py --site tv.gxtv.cn
 python tools/verify_plugin.py
 python tools/test_plugin_tools.py
@@ -112,7 +116,7 @@ python tools/verify_plugin.py --base-url https://your-host.example.test/cjs
 发布顺序：
 
 1. 修改该网站源码，递增 `site.json.version`，生成 SO、runtime、manifest 和探针。
-2. 运行校验，检查脚本、两个 ABI 的完整性、站点和版本一致性。
+2. 运行校验，检查脚本、三种原生包的完整性、站点和版本一致性。
 3. 先上传 `dist` 文件，再上传站点 `plugin.json`，最后更新 `version.cjs`、根 `.cjs` 和目录。
    使用 Git 仓库可同一次提交发布；自建静态服务器应遵循以上顺序，避免客户端看到未传完的版本。
 4. 客户端配置你的在线 `catalog.json`，导入对应频道表。仅分享一个未注册的 `.cjs` URL 不会自动安装站点。
