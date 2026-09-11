@@ -1,82 +1,26 @@
-# cjs
+# CJS
 
-CJS 是 **Ku9 JS 的超集**：JS 沿用 `main(item)` 和 `ku9.*`，在此基础上增加按网站隔离的
-C 原生处理、清晰度选择和在线版本管理。纯 JS 插件继续使用 Ku9，无需学习另一套 JS 协议。
-每个网站独立存放脚本和 SO，不编译通用的站点解密库。
+NativeWasmTv 的站点插件，兼容 Ku9 JS，并提供按站点独立的 C 原生处理、清晰度选择和在线更新。
 
-## 开发文档
+> 本项目仅供个人学习、技术研究与交流，请勿用于商业用途或任何违法、侵权活动。
 
-- [开发入门](docs/developer-guide.md)：选用 Ku9 或 CJS、网站目录、构建与在线发布。
-- [JS 接口](docs/javascript-api.md)：Ku9 兼容接口、返回格式、CJS 扩展与运行限制。
-- [真实 Ku9 源测试](docs/ku9-source-tests.md)：四类脚本、七个频道的解析与取流结果。
-- [安装与更新协议](docs/plugin-protocol.md)：JSON 字段、架构切换、缓存和完整性校验。
-- [Ku9 脚本示例](examples/ku9-main.js)：同一份 `main(item)` 可作为 Ku9 脚本或 CJS 站点入口。
+## 使用
 
-当前内测协议为 **5**，按 Android API 与应用进程架构选择三种原生包。
-JS 仍兼容 Ku9，已有 `cjs-v4` 参数语义不变。详见 [三档原生包及实测](docs/native-profiles-v5.md)。
+使用支持 **协议 5 和在线 `.cjs` 入口** 的 NativeWasmTv，将以下链接添加到「频道列表」网络来源：
 
-## 在线频道配置
+- [央视网](https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.m3u)
+- [央视频](https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.m3u)
+- [广西电视](https://raw.githubusercontent.com/TvWasm/cjs/main/gxtv.m3u)
 
-将以下地址添加到 NativeWasmTv 的「频道列表」网络来源中：
+插件目录：[catalog.json](https://raw.githubusercontent.com/TvWasm/cjs/main/catalog.json)。频道可用性及清晰度以源站实际提供为准。
 
-| 配置 | 内容 | 在线导入地址 |
-| --- | --- | --- |
-| [cctv.m3u](cctv.m3u) | 央视网，20 个频道 | [Raw](https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.m3u) |
-| [cmg.m3u](cmg.m3u) | 央视频，30 个央视/CGTN/专题频道、33 个卫视频道 | [Raw](https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.m3u) |
-| [gxtv.m3u](gxtv.m3u) | 广西平台，5 个广西频道和 CETV-1/2/4 | [Raw](https://raw.githubusercontent.com/TvWasm/cjs/main/gxtv.m3u) |
+## 开发
 
-频道行直接使用在线 `.cjs?参数` 地址，例如：
+[开发入门](docs/developer-guide.md) · [JS 接口](docs/javascript-api.md) · [安装与更新协议](docs/plugin-protocol.md) · [原生构建配置](docs/native-profiles-v5.md)
 
-```m3u
-#EXTM3U
-#EXTINF:-1 group-title="广西电视",广西综艺旅游
-https://raw.githubusercontent.com/TvWasm/cjs/main/gxtv.cjs?id=f3335975f9fe11e88bcfe41f13b60c62
-#EXTINF:-1 group-title="央视网",CCTV-1 综合
-https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctv1&quality=high
-#EXTINF:-1 group-title="央视频",CCTV-1 综合
-https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600001859
-```
+## 免责声明
 
-需要包含 **在线 `.cjs` 频道入口支持** 的新版 NativeWasmTv；较早的 protocol 4 客户端也需要升级。
-`id` 必填：广西使用 32 位频道编号，央视网使用 `cctv1` 等流编号，央视频使用数字 PID。
-可选 `quality=high|medium|low` 仅覆盖当前频道，不改写客户端设置；省略时使用客户端配置。
-其他查询参数会提供给站点 `main(item)` 的 `item.params`，当前三个站点只约定 `id` 和 `quality`。
-
-`.cjs` 同时保留精简版本描述功能。客户端识别此类频道地址后，从插件目录匹配站点，
-将查询参数交给对应插件，再播放插件解析出的媒体流。
-插件目录配置为 `https://raw.githubusercontent.com/TvWasm/cjs/main/catalog.json`。
-
-央视网和央视频支持高、中、低档，M3U 不重复列出清晰度线路。
-实际可用档位受频道自身限制；广西平台当前只声明一档。
-频道编号沿用应用内置列表及已提供的广西页面地址，未逐台重新验证直播可用性。
-
-| Site directory | Native library | Quality tiers |
-| --- | --- | --- |
-| `sites/tv.cctv.com` | `cctv.so` | high / medium / low (HLS renditions) |
-| `sites/yangshipin.cn` | `yangshipin.so` | high=fhd / medium=shd / low=hd |
-| `sites/tv.gxtv.cn` | `gxtv.so` | high (the current API exposes one stream) |
-
-Each directory owns source, build recipe, JS, version, plain JSON manifest and ABI artifacts.
-Yangshipin links signing and CMG decryption into one library; its intermediate static
-archive is never distributed. A new website is discovered from `sites/<domain>/site.json`.
-
-```powershell
-./tools/build-native.ps1 -NdkDirectory D:\android\sdk\ndk
-# Or build one site only:
-./tools/build-native.ps1 -NdkDirectory D:\android\sdk\ndk -Site tv.gxtv.cn
-python tools/build_plugin.py --site tv.gxtv.cn
-python tools/verify_plugin.py
-```
-
-Increase only the changed site's integer `version` before publishing changes. Do not
-rewrite already published versions. The client verifies and installs one site's runtime
-and one architecture's library, never other sites. See [protocol](docs/plugin-protocol.md).
-
-## 清单格式与完整性
-
-`catalog.json` 和各站点的 `plugin.json` 使用紧凑的明文 JSON，字段可直接查看；
-不再使用 Base64 包装、RSA 签名或签名密钥。构建工具只依赖 Python 标准库。
-下载脚本和 SO 后校验一次 `sha256`，确保内容完整；冷启动不重复计算整个文件的哈希。
-保留协议版本、站点标识、文件路径和 SO 架构检查，避免错误配置或混用 32/64 位库。
-协议 5 使用独立缓存，旧协议缓存不会混用；首次访问各站点时下载对应新包。
-必须先升级支持协议 5 的 APK，再使用协议 5 目录；请使用配套的协议 5 客户端。
+- 本项目不提供或托管音视频内容，相关内容、商标及版权归各自权利人所有，与相关平台无隶属或授权关系。
+- 请遵守适用法律法规及源站服务条款，仅在获得必要授权的范围内学习和测试；学习用途不代表获得内容使用授权。
+- 项目按现状提供，不保证可用性、准确性或持续维护。使用者应自行评估风险，并依法承担自身使用行为产生的责任。
+- 如涉及侵权，请通过仓库 Issues 提供相关说明，维护者将核实处理。本声明不排除依法不能免除的责任。
