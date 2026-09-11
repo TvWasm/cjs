@@ -8,11 +8,31 @@ NativeWasmTv 的站点插件，兼容 Ku9 JS，并提供按站点独立的 C 原
 
 项目目前处于测试阶段。在 NativeWasmTv 中，将以下链接添加到「频道列表」网络来源：
 
-- [央视网](https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.m3u)
-- [央视频](https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.m3u)
-- [广西电视](https://raw.githubusercontent.com/TvWasm/cjs/main/gxtv.m3u)
+央视网：
 
-插件目录：[catalog.json](https://raw.githubusercontent.com/TvWasm/cjs/main/catalog.json)。频道可用性及清晰度以源站实际提供为准。
+```text
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.m3u
+```
+
+央视频：
+
+```text
+https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.m3u
+```
+
+广西电视：
+
+```text
+https://raw.githubusercontent.com/TvWasm/cjs/main/gxtv.m3u
+```
+
+插件目录：
+
+```text
+https://raw.githubusercontent.com/TvWasm/cjs/main/catalog.json
+```
+
+频道可用性及清晰度以源站实际提供为准。
 
 ## 开发
 
