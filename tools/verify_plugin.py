@@ -20,6 +20,7 @@ def main():
     parser.add_argument('--base-url', default=BASE)
     args=parser.parse_args(); ROOT=args.root.resolve(); BASE=args.base_url.rstrip('/')
     cat=verify(ROOT/'catalog.json'); assert len({s['id'] for s in cat['sites']})==len(cat['sites'])
+    source_sites = {source: site for site in cat['sites'] for source in site['sources']}
     for site in cat['sites']:
         domain=site['id']; probe=json.loads(local(site['config']).read_text('utf-8'))
         playback=site['playback']
@@ -36,7 +37,10 @@ def main():
                     assert not pending and 'group-title="' in line
                     pending=True
                 elif line and not line.startswith('#'):
-                    assert pending and line.split('?',1)[0]==source
+                    channel_source = line.split('?',1)[0]
+                    assert pending and channel_source in source_sites
+                    channel_site = source_sites[channel_source]
+                    playback = channel_site['playback']
                     pending=False; urls.append(line)
                     query=parse_qs(urlsplit(line).query,keep_blank_values=True)
                     assert all(len(values)==1 for values in query.values())
@@ -44,7 +48,7 @@ def main():
                     for parameter,pattern in playback['parameters'].items():
                         value=query[parameter][0]; assert re.fullmatch(pattern,value)
                         page=page.replace('{'+parameter+'}',quote(value,safe=''))
-                    assert '{' not in page and urlsplit(page).hostname in site['hosts']
+                    assert '{' not in page and urlsplit(page).hostname in channel_site['hosts']
             assert not pending and urls and len(urls)==len(set(urls))
             print(f"verified {playlist.name}: {len(urls)} direct .cjs channels and routing")
         manifest=verify(local(probe['manifest']))

@@ -8,13 +8,7 @@ NativeWasmTv 的站点插件，兼容 Ku9 JS，并提供按站点独立的 C 原
 
 项目目前处于测试阶段。在 NativeWasmTv 中，将以下链接添加到「频道列表」网络来源：
 
-央视网：
-
-```text
-https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.m3u
-```
-
-央视频：
+央视及卫视频道（央视频来源优先）：
 
 ```text
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.m3u

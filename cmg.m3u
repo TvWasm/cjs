@@ -1,130 +1,168 @@
 #EXTM3U
-# NativeWasmTv online CJS channel sources; requires .cjs URL support.
-# Optional quality=high|medium|low overrides this channel only; omitted uses client settings.
 
-#EXTINF:-1 tvg-id="CCTV1" group-title="央视频-央视",CCTV-1 综合
+#EXTINF:-1 tvg-id="CCTV1" group-title="央视频道",CCTV-1 综合
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600001859
-#EXTINF:-1 tvg-id="CCTV2" group-title="央视频-央视",CCTV-2 财经
+#EXTINF:-1 tvg-id="CCTV2" group-title="央视频道",CCTV-2 财经
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600001800
-#EXTINF:-1 tvg-id="CCTV3" group-title="央视频-央视",CCTV-3 综艺
+#EXTINF:-1 tvg-id="CCTV3" group-title="央视频道",CCTV-3 综艺
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600001801
-#EXTINF:-1 tvg-id="CCTV4" group-title="央视频-央视",CCTV-4 中文国际（亚）
+#EXTINF:-1 tvg-id="CCTV4" group-title="央视频道",CCTV-4 中文国际（亚）
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600001814
-#EXTINF:-1 tvg-id="CCTV5" group-title="央视频-央视",CCTV-5 体育
+#EXTINF:-1 tvg-id="CCTV5" group-title="央视频道",CCTV-5 体育
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600001818
-#EXTINF:-1 tvg-id="CCTV5+" group-title="央视频-央视",CCTV-5+ 体育赛事
-https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600001817
-#EXTINF:-1 tvg-id="CCTV6" group-title="央视频-央视",CCTV-6 电影
+#EXTINF:-1 tvg-id="CCTV6" group-title="央视频道",CCTV-6 电影
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600108442
-#EXTINF:-1 tvg-id="CCTV7" group-title="央视频-央视",CCTV-7 国防军事
+#EXTINF:-1 tvg-id="CCTV7" group-title="央视频道",CCTV-7 国防军事
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600004092
-#EXTINF:-1 tvg-id="CCTV8" group-title="央视频-央视",CCTV-8 电视剧
+#EXTINF:-1 tvg-id="CCTV8" group-title="央视频道",CCTV-8 电视剧
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600001803
-#EXTINF:-1 tvg-id="CCTV9" group-title="央视频-央视",CCTV-9 纪录
+#EXTINF:-1 tvg-id="CCTV9" group-title="央视频道",CCTV-9 纪录
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600004078
-#EXTINF:-1 tvg-id="CCTV10" group-title="央视频-央视",CCTV-10 科教
+#EXTINF:-1 tvg-id="CCTV10" group-title="央视频道",CCTV-10 科教
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600001805
-#EXTINF:-1 tvg-id="CCTV11" group-title="央视频-央视",CCTV-11 戏曲
+#EXTINF:-1 tvg-id="CCTV11" group-title="央视频道",CCTV-11 戏曲
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600001806
-#EXTINF:-1 tvg-id="CCTV12" group-title="央视频-央视",CCTV-12 社会与法
+#EXTINF:-1 tvg-id="CCTV12" group-title="央视频道",CCTV-12 社会与法
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600001807
-#EXTINF:-1 tvg-id="CCTV13" group-title="央视频-央视",CCTV-13 新闻
+#EXTINF:-1 tvg-id="CCTV13" group-title="央视频道",CCTV-13 新闻
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600001811
-#EXTINF:-1 tvg-id="CCTV14" group-title="央视频-央视",CCTV-14 少儿
+#EXTINF:-1 tvg-id="CCTV14" group-title="央视频道",CCTV-14 少儿
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600001809
-#EXTINF:-1 tvg-id="CCTV15" group-title="央视频-央视",CCTV-15 音乐
+#EXTINF:-1 tvg-id="CCTV15" group-title="央视频道",CCTV-15 音乐
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600001815
-#EXTINF:-1 tvg-id="CCTV16" group-title="央视频-央视",CCTV-16 奥林匹克
+#EXTINF:-1 tvg-id="CCTV16" group-title="央视频道",CCTV-16 奥林匹克
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600098637
-#EXTINF:-1 tvg-id="CCTV17" group-title="央视频-央视",CCTV-17 农业农村
+#EXTINF:-1 tvg-id="CCTV17" group-title="央视频道",CCTV-17 农业农村
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600001810
-#EXTINF:-1 group-title="央视频-央视",CCTV16（4K）
+#EXTINF:-1 tvg-id="CCTV5+" group-title="央视频道",CCTV-5+ 体育赛事
+https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600001817
+#EXTINF:-1 group-title="央视频道",CCTV16（4K）
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600099502
-#EXTINF:-1 group-title="央视频-央视",CCTV4K
+#EXTINF:-1 group-title="央视频道",CCTV4K
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002264
-#EXTINF:-1 group-title="央视频-央视",CCTV8K
+#EXTINF:-1 group-title="央视频道",CCTV8K
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600156816
-#EXTINF:-1 group-title="央视频-央视",CGTN
+#EXTINF:-1 group-title="央视频道",CGTN
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600014550
-#EXTINF:-1 group-title="央视频-央视",CGTN法语频道
+#EXTINF:-1 group-title="央视频道",CGTN法语频道
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600084704
-#EXTINF:-1 group-title="央视频-央视",CGTN俄语频道
+#EXTINF:-1 group-title="央视频道",CGTN俄语频道
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600084758
-#EXTINF:-1 group-title="央视频-央视",CGTN阿拉伯语频道
+#EXTINF:-1 group-title="央视频道",CGTN阿拉伯语频道
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600084782
-#EXTINF:-1 group-title="央视频-央视",CGTN西班牙语频道
+#EXTINF:-1 group-title="央视频道",CGTN西班牙语频道
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600084744
-#EXTINF:-1 group-title="央视频-央视",CGTN外语纪录频道
+#EXTINF:-1 group-title="央视频道",CGTN外语纪录频道
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600084781
-#EXTINF:-1 group-title="央视频-央视",CCTV风云剧场频道
+#EXTINF:-1 group-title="央视频道",CCTV风云剧场频道
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600099658
-#EXTINF:-1 group-title="央视频-央视",CCTV第一剧场频道
+#EXTINF:-1 group-title="央视频道",CCTV第一剧场频道
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600099655
-#EXTINF:-1 group-title="央视频-央视",CCTV怀旧剧场频道
+#EXTINF:-1 group-title="央视频道",CCTV怀旧剧场频道
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600099620
-#EXTINF:-1 group-title="央视频-卫视",北京卫视
+#EXTINF:-1 tvg-id="CCTV1" tvg-name="CCTV-1 综合" group-title="央视频道",CCTV-1 综合
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctv1
+#EXTINF:-1 tvg-id="CCTV2" tvg-name="CCTV-2 财经" group-title="央视频道",CCTV-2 财经
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctv2
+#EXTINF:-1 tvg-id="CCTV3" tvg-name="CCTV-3 综艺" group-title="央视频道",CCTV-3 综艺
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctv3
+#EXTINF:-1 tvg-id="CCTV4" tvg-name="CCTV-4 中文国际（亚）" group-title="央视频道",CCTV-4 中文国际（亚）
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctv4
+#EXTINF:-1 tvg-id="CCTV5" tvg-name="CCTV-5 体育" group-title="央视频道",CCTV-5 体育
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctv5
+#EXTINF:-1 tvg-id="CCTV6" tvg-name="CCTV-6 电影" group-title="央视频道",CCTV-6 电影
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctv6
+#EXTINF:-1 tvg-id="CCTV7" tvg-name="CCTV-7 国防军事" group-title="央视频道",CCTV-7 国防军事
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctv7
+#EXTINF:-1 tvg-id="CCTV8" tvg-name="CCTV-8 电视剧" group-title="央视频道",CCTV-8 电视剧
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctv8
+#EXTINF:-1 tvg-id="CCTV9" tvg-name="CCTV-9 纪录" group-title="央视频道",CCTV-9 纪录
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctvjilu
+#EXTINF:-1 tvg-id="CCTV10" tvg-name="CCTV-10 科教" group-title="央视频道",CCTV-10 科教
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctv10
+#EXTINF:-1 tvg-id="CCTV11" tvg-name="CCTV-11 戏曲" group-title="央视频道",CCTV-11 戏曲
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctv11
+#EXTINF:-1 tvg-id="CCTV12" tvg-name="CCTV-12 社会与法" group-title="央视频道",CCTV-12 社会与法
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctv12
+#EXTINF:-1 tvg-id="CCTV13" tvg-name="CCTV-13 新闻" group-title="央视频道",CCTV-13 新闻
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctv13
+#EXTINF:-1 tvg-id="CCTV14" tvg-name="CCTV-14 少儿" group-title="央视频道",CCTV-14 少儿
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctvchild
+#EXTINF:-1 tvg-id="CCTV15" tvg-name="CCTV-15 音乐" group-title="央视频道",CCTV-15 音乐
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctv15
+#EXTINF:-1 tvg-id="CCTV16" tvg-name="CCTV-16 奥林匹克" group-title="央视频道",CCTV-16 奥林匹克
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctv16
+#EXTINF:-1 tvg-id="CCTV17" tvg-name="CCTV-17 农业农村" group-title="央视频道",CCTV-17 农业农村
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctv17
+#EXTINF:-1 tvg-id="CCTV5+" tvg-name="CCTV-5+ 体育赛事" group-title="央视频道",CCTV-5+ 体育赛事
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctv5plus
+#EXTINF:-1 tvg-id="CCTV4E" tvg-name="CCTV-4 中文国际（欧）" group-title="央视频道",CCTV-4 中文国际（欧）
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctveurope
+#EXTINF:-1 tvg-id="CCTV4A" tvg-name="CCTV-4 中文国际（美）" group-title="央视频道",CCTV-4 中文国际（美）
+https://raw.githubusercontent.com/TvWasm/cjs/main/cctv.cjs?id=cctvamerica
+#EXTINF:-1 group-title="卫视频道",北京卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002309
-#EXTINF:-1 group-title="央视频-卫视",江苏卫视
+#EXTINF:-1 group-title="卫视频道",江苏卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002521
-#EXTINF:-1 group-title="央视频-卫视",东方卫视
+#EXTINF:-1 group-title="卫视频道",东方卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002483
-#EXTINF:-1 group-title="央视频-卫视",浙江卫视
+#EXTINF:-1 group-title="卫视频道",浙江卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002520
-#EXTINF:-1 group-title="央视频-卫视",湖南卫视
+#EXTINF:-1 group-title="卫视频道",湖南卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002475
-#EXTINF:-1 group-title="央视频-卫视",湖北卫视
+#EXTINF:-1 group-title="卫视频道",湖北卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002508
-#EXTINF:-1 group-title="央视频-卫视",广东卫视
+#EXTINF:-1 group-title="卫视频道",广东卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002485
-#EXTINF:-1 group-title="央视频-卫视",广西卫视
+#EXTINF:-1 group-title="卫视频道",广西卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002509
-#EXTINF:-1 group-title="央视频-卫视",黑龙江卫视
+#EXTINF:-1 group-title="卫视频道",黑龙江卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002498
-#EXTINF:-1 group-title="央视频-卫视",海南卫视
+#EXTINF:-1 group-title="卫视频道",海南卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002506
-#EXTINF:-1 group-title="央视频-卫视",重庆卫视
+#EXTINF:-1 group-title="卫视频道",重庆卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002531
-#EXTINF:-1 group-title="央视频-卫视",深圳卫视
+#EXTINF:-1 group-title="卫视频道",深圳卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002481
-#EXTINF:-1 group-title="央视频-卫视",四川卫视
+#EXTINF:-1 group-title="卫视频道",四川卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002516
-#EXTINF:-1 group-title="央视频-卫视",河南卫视
+#EXTINF:-1 group-title="卫视频道",河南卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002525
-#EXTINF:-1 group-title="央视频-卫视",福建东南卫视
+#EXTINF:-1 group-title="卫视频道",福建东南卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002484
-#EXTINF:-1 group-title="央视频-卫视",贵州卫视
+#EXTINF:-1 group-title="卫视频道",贵州卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002490
-#EXTINF:-1 group-title="央视频-卫视",江西卫视
+#EXTINF:-1 group-title="卫视频道",江西卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002503
-#EXTINF:-1 group-title="央视频-卫视",辽宁卫视
+#EXTINF:-1 group-title="卫视频道",辽宁卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002505
-#EXTINF:-1 group-title="央视频-卫视",安徽卫视
+#EXTINF:-1 group-title="卫视频道",安徽卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002532
-#EXTINF:-1 group-title="央视频-卫视",河北卫视
+#EXTINF:-1 group-title="卫视频道",河北卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002493
-#EXTINF:-1 group-title="央视频-卫视",山东卫视
+#EXTINF:-1 group-title="卫视频道",山东卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600002513
-#EXTINF:-1 group-title="央视频-卫视",天津卫视
+#EXTINF:-1 group-title="卫视频道",天津卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600152137
-#EXTINF:-1 group-title="央视频-卫视",吉林卫视
+#EXTINF:-1 group-title="卫视频道",吉林卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600190405
-#EXTINF:-1 group-title="央视频-卫视",陕西卫视
+#EXTINF:-1 group-title="卫视频道",陕西卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600190400
-#EXTINF:-1 group-title="央视频-卫视",甘肃卫视
+#EXTINF:-1 group-title="卫视频道",甘肃卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600190408
-#EXTINF:-1 group-title="央视频-卫视",宁夏卫视
+#EXTINF:-1 group-title="卫视频道",宁夏卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600190737
-#EXTINF:-1 group-title="央视频-卫视",内蒙古卫视
+#EXTINF:-1 group-title="卫视频道",内蒙古卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600190401
-#EXTINF:-1 group-title="央视频-卫视",云南卫视
+#EXTINF:-1 group-title="卫视频道",云南卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600190402
-#EXTINF:-1 group-title="央视频-卫视",山西卫视
+#EXTINF:-1 group-title="卫视频道",山西卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600190407
-#EXTINF:-1 group-title="央视频-卫视",青海卫视
+#EXTINF:-1 group-title="卫视频道",青海卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600190406
-#EXTINF:-1 group-title="央视频-卫视",西藏卫视
+#EXTINF:-1 group-title="卫视频道",西藏卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600190403
-#EXTINF:-1 group-title="央视频-卫视",中国教育电视台1频道
+#EXTINF:-1 group-title="卫视频道",中国教育电视台1频道
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600171827
-#EXTINF:-1 group-title="央视频-卫视",新疆卫视
+#EXTINF:-1 group-title="卫视频道",新疆卫视
 https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.cjs?id=600152138
