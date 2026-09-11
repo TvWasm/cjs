@@ -33,7 +33,7 @@ There is no Base64 envelope or digital signature. File downloads retain SHA-256 
 checks plus protocol/site/path/ELF compatibility checks. Whole-file hashes are checked at
 installation, not on every cold start. Build and verification tools need only Python's
 standard library. Protocol 5 requires an updated host and a new cache namespace.
-Protocol 4 caches and Base64 envelopes are not loaded. See [native profiles](native-profiles-v5.md).
+See [native profiles](native-profiles-v5.md) for build and cache details.
 
 `version.cjs` has `v` (positive integer), `id` (website domain), and `manifest` (online
 site manifest URL). A site manifest contains `id`, `version`, `files`. Exactly one
@@ -61,8 +61,7 @@ waits for a new process. Other sites remain usable and may update independently.
 versions are validated before activation; a damaged pending download keeps the old active
 version. Network requests never hold the runtime monitor used by UI and playback.
 
-Protocol 4 caches are left alone and never loaded by protocol 5. Only the first requested
-site is downloaded to the new namespace. Changing between 32/64-bit APKs selects independent
+Sites are downloaded on demand. Changing between 32/64-bit APKs selects independent
 site caches. Updating site A does not download, load or change B/C.
 
 ## Resolution contract (at most three tiers)
@@ -71,8 +70,7 @@ site caches. Updating site A does not download, load or change B/C.
 
 M3U channel addresses can directly use `https://.../gxtv.cjs?id=<channel-id>`;
 no `webview://` prefix is needed. `cctv.cjs?id=cctv1` selects CCTV and
-`cmg.cjs?id=600001859` selects Yangshipin. Requires a host with `.cjs` source support,
-which is an additive extension to protocol 4, not available in earlier v4 hosts.
+`cmg.cjs?id=600001859` selects Yangshipin.
 
 Each catalog site registers `sources` (online descriptor aliases) and `playback`
 (`page` URL template plus required `parameters` regex rules), owned by its `site.json`.
@@ -125,7 +123,6 @@ for `ku9`. Both engines share the JS bootstrap and result parser. CJS caches are
 and `setCache` TTL uses milliseconds. URL strings, `url/playUrl/playurl/urls[0]`, and inline
 M3U8 strings or `m3u8/content` objects are supported. Generated live playlists use the
 existing Ku9 loopback server and a 2–5 second refresh cadence, cancelled on channel switch.
-These additions and `jsApi: ku9` require the updated host; protocol 4 alone is not a JS capability marker.
 Each resolver executes only its site's script. New hosts execute CCTV/Gxtv `main(item)` in bundled QuickJS on a worker thread,
 with no browser DOM. JSON parameters and these HTTP helpers retain the same contract;
 Promise jobs are supported, browser timers are not. Yangshipin's existing browser
