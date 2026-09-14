@@ -76,6 +76,10 @@ return {urls: ["https://cdn.example.test/live.m3u8"]};
 字段优先顺序为 `url` → `playUrl` → `playurl` → `urls[0]`。`urls` 不表示自动逐个失败重试。
 `main` 也可以返回 Promise；Promise 的完成值按相同规则处理。
 
+新版 nTv 的 Ku9 HLS 代理还支持 `{url, referer, userAgent}`，将来源页和浏览器标识
+用于播放列表及分片请求；返回 M3U8 文本时也可附加这两个字段。旧客户端只读取播放地址，
+会忽略这些字段。江西台等校验来源页的站点需要包含此修复的客户端，不能只更新 JS。
+
 支持返回 M3U8 文本，或者 `{m3u8: text}` / `{content: text}`：
 
 ```js

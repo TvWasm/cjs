@@ -1,0 +1,9 @@
+江西频道,#genre#
+江西卫视,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/jxntv.js?id=jxtv1
+江西都市,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/jxntv.js?id=jxtv2
+江西经济生活,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/jxntv.js?id=jxtv3
+江西公共农业,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/jxntv.js?id=jxtv5
+江西少儿,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/jxntv.js?id=jxtv6
+江西新闻,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/jxntv.js?id=jxtv7
+江西移动电视,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/jxntv.js?id=jxtv8
+陶瓷频道,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/jxntv.js?id=tcpd
