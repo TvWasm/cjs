@@ -48,13 +48,13 @@ function main(item) {
         // 官网排序会调整；优先按固定 videoId 匹配，不按返回数组下标取台。
         if (entry && (String(entry.videoId) === channel[1]
                 || (!entry.videoId && entry.title === channel[2]))) {
-            return {url: hebtvPlaybackUrl(entry), referer: pageUrl};
+            return {url: hebtvPlaybackUrl(entry, response.headers), referer: pageUrl};
         }
     }
     throw new Error('河北台接口中没有找到：' + channel[2]);
 }
 
-function hebtvPlaybackUrl(entry) {
+function hebtvPlaybackUrl(entry, headers) {
     var video = entry.liveVideo && entry.liveVideo[0];
     var format = video && video.formats && video.formats[0];
     var url = format && format.url;
@@ -65,7 +65,18 @@ function hebtvPlaybackUrl(entry) {
         throw new Error('河北台频道缺少有效播放配置：' + (entry.title || entry.videoId));
     }
     // 与官网 linkToMd5 一致；每次解析重新生成，不缓存过期播放地址或写死密钥。
-    var expires = Math.floor(new Date().getTime() / 1000) + 7200;
+    // Older TVs may have a wrong system clock. Use the same HTTPS response's
+    // server time when available; no extra clock-sync request is needed.
+    var now = new Date().getTime();
+    for (var header in (headers || {})) {
+        if (Object.prototype.hasOwnProperty.call(headers, header)
+                && header.toLowerCase() === 'date') {
+            var serverTime = Date.parse(String(headers[header]));
+            if (isFinite(serverTime) && serverTime > 0) now = serverTime;
+            break;
+        }
+    }
+    var expires = Math.floor(now / 1000) + 7200;
     var signature = ku9.md5(movie.liveUri + movie.liveKey + expires);
     if (!/^[a-f0-9]{32}$/i.test(signature)) throw new Error('河北台播放地址签名失败');
     url = url.split('#')[0];
