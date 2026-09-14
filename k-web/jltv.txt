@@ -1,6 +1,6 @@
 吉林频道,#genre#
-吉林卫视https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/jltv.js?id=jlws
-吉林都市https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/jltv.js?id=ds
+吉林卫视,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/jltv.js?id=jlws
+吉林都市,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/jltv.js?id=ds
 吉林生活,https://raw.githubusercontent.com/TvWasm/cjs/main//k-web/ku9/js/jltv.js?id=sh
 吉林影视,https://raw.githubusercontent.com/TvWasm/cjs/main//k-web/ku9/js/jltv.js?id=ys
 吉林乡村,https://raw.githubusercontent.com/TvWasm/cjs/main//k-web/ku9/js/jltv.js?id=xc
