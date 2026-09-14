@@ -20,11 +20,8 @@ https://raw.githubusercontent.com/TvWasm/cjs/main/cmg.m3u
 https://raw.githubusercontent.com/TvWasm/cjs/main/gxtv.m3u
 ```
 
-插件目录：
-
-```text
-https://raw.githubusercontent.com/TvWasm/cjs/main/catalog.json
-```
+应用已内置本仓库的站点索引地址，正常使用只需导入频道表，无需另外添加插件目录。
+`catalog.json` 仍用于识别频道所属站点及安装入口；脚本、原生库、版本和缓存按站点独立管理。
 
 频道可用性及清晰度以源站实际提供为准。
 

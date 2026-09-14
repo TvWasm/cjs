@@ -121,6 +121,10 @@ python tools/verify_plugin.py --base-url https://your-host.example.test/cjs
    使用 Git 仓库可同一次提交发布；自建静态服务器应遵循以上顺序，避免客户端看到未传完的版本。
 4. 客户端配置你的在线 `catalog.json`，导入对应频道表。仅分享一个未注册的 `.cjs` URL 不会自动安装站点。
 
+官方仓库地址已内置在客户端，普通用户无需单独配置。`catalog.json` 负责站点发现和频道参数路由，
+按站点隔离不代表可以删除此索引。根目录重复的 `plugin.json` 已移除，构建不再生成；
+如果曾手动配置该旧地址，请改为 `catalog.json`。各网站下的 `plugin.json` 是安装文件清单，必须保留。
+
 脚本或 SO 内容改变但没有提高版本号时，构建工具会拒绝生成清单。
 不要手工修改 `dist/runtime.json` 或用相同版本号覆盖已发布内容。
 仅修改频道别名/参数路由时可用 `--catalog-only`；该选项不会重建站点运行文件。

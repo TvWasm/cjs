@@ -7,7 +7,7 @@ Pure JS plugins keep the existing Ku9 interface; no separate pure-JS protocol is
 ## Layout
 
 ```
-catalog.json                   # plain JSON registry; plugin.json is the same registry
+catalog.json                   # shared discovery/routing index; no root plugin.json copy
 cmg.cjs / cctv.cjs / gxtv.cjs   # aliases for per-site version.cjs
 sites/<domain>/
   site.json                    # build settings, integer version, quality mapping
@@ -20,6 +20,11 @@ sites/<domain>/
   dist/armv7-perf/<module>.so   # API 19+, r25c Clang
   dist/arm64-v8a/<module>.so       # API 21+, r30 Clang
 ```
+
+The host still requires `catalog.json` for discovery and channel routing; per-site
+isolation does not remove that dependency. The redundant root `plugin.json` copy is
+removed; custom catalog settings using that old URL should use `catalog.json` instead.
+Each `sites/<domain>/plugin.json` remains required as the site's artifact manifest.
 
 The registry lists `id`, allowed `hosts`, `module`, `engine`, `qualities`, and online
 `config` URL for each website. Registry and manifests are compact plain JSON:

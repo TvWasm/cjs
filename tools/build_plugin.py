@@ -80,7 +80,6 @@ def main():
         outputs[ROOT/(cfg['alias']+'.cjs')]=compact(probe)
     catalog_bytes=compact(dict(protocol=PROTOCOL,sites=catalog))
     outputs[ROOT/'catalog.json']=catalog_bytes
-    outputs[ROOT/'plugin.json']=catalog_bytes
     for path, data in outputs.items():
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(data)

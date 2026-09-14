@@ -39,6 +39,17 @@ class PublishingTests(unittest.TestCase):
         self.assertEqual(before, (self.site / 'dist/runtime.json').read_bytes())
         catalog = json.loads((self.root / 'catalog.json').read_text())
         self.assertEqual(catalog['sites'][0]['sources'], [self.base + '/cctv.cjs'])
+        self.assertFalse((self.root / 'plugin.json').exists())
+
+    def test_catalog_only_preserves_site_releases_without_duplicate_registry(self):
+        self.tool('build_plugin.py')
+        before = {p: p.read_bytes() for p in self.site.rglob('*') if p.is_file()}
+        alias = (self.root / 'cctv.cjs').read_bytes()
+        self.tool('build_plugin.py', '--catalog-only')
+        self.tool('verify_plugin.py')
+        self.assertFalse((self.root / 'plugin.json').exists())
+        self.assertEqual(alias, (self.root / 'cctv.cjs').read_bytes())
+        self.assertEqual(before, {p: p.read_bytes() for p in self.site.rglob('*') if p.is_file()})
 
     def test_changed_script_requires_version_bump_without_partial_publication(self):
         runtime = (self.site / 'dist/runtime.json').read_bytes()
