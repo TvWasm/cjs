@@ -1,0 +1,7 @@
+福建频道,#genre#
+福建综合,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/fjtv.js?id=zhpd
+东南卫视,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/fjtv.js?id=setv
+福建新闻,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/fjtv.js?id=xwpd
+福建文旅体育,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/fjtv.js?id=dspd
+福建少儿,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/fjtv.js?id=sepd
+海峡卫视,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/fjtv.js?id=hxtv
