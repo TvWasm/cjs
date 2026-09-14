@@ -1,0 +1,8 @@
+河北频道,#genre#
+河北卫视,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/hebtv.js?id=hbws
+河北经济生活,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/hebtv.js?id=jjsh
+河北都市,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/hebtv.js?id=hbds
+河北文旅体育,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/hebtv.js?id=wlty
+河北少儿科教,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/hebtv.js?id=sekj
+河北三农,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/hebtv.js?id=sannong
+河北三佳购物,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/hebtv.js?id=sjgw
