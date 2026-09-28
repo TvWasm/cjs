@@ -3,6 +3,11 @@ from pathlib import Path
 from urllib.parse import urlsplit, parse_qs, quote, unquote
 ROOT=Path(__file__).resolve().parents[1]
 BASE='https://raw.githubusercontent.com/TvWasm/cjs/main'
+ELF_ABIS={
+    'armeabi-v7a': (1, 40),
+    'arm64-v8a': (2, 183),
+    'x86': (1, 3),
+}
 def verify(path):
     value=json.loads(path.read_text('utf-8')); assert value['protocol']==5
     assert 'payload' not in value and 'signature' not in value
@@ -54,9 +59,10 @@ def main():
         manifest=verify(local(probe['manifest']))
         assert manifest['id']==domain and manifest['version']==probe['v']
         profiles=json.loads((ROOT/'native/profiles.json').read_text('utf-8'))
+        assert all(p['abi'] in ELF_ABIS for p in profiles)
         expected={('runtime.json','all',None)} | {(site['module']+'.so',p['abi'],p['id']) for p in profiles}
         assert {(f['name'],f['abi'],f.get('profile')) for f in manifest['files']} == expected
-        assert len(manifest['files'])==4
+        assert len(manifest['files'])==len(profiles)+1
         for f in manifest['files']:
             path=local(f['url']); assert path.is_relative_to(ROOT/'sites'/domain) and path.name==f['name']
             data=path.read_bytes(); assert hashlib.sha256(data).hexdigest()==f['sha256']
@@ -71,7 +77,8 @@ def main():
                 assert f['minSdk']==profile['minSdk'] and f['ndk']==profile['ndk'] and f['abi']==profile['abi']
                 assert path.parent.name==profile['directory']
                 assert f['name']==site['module']+'.so' and data[:4]==b'\x7fELF'
-                assert data[4]==(2 if f['abi']=='arm64-v8a' else 1)
-                assert struct.unpack_from('<H',data,18)[0]==(183 if f['abi']=='arm64-v8a' else 40)
-        print(f"verified {domain} v{probe['v']}: independent script + 3 native profiles")
+                elf_class, elf_machine=ELF_ABIS[f['abi']]
+                assert data[4]==elf_class
+                assert struct.unpack_from('<H',data,18)[0]==elf_machine
+        print(f"verified {domain} v{probe['v']}: independent script + {len(profiles)} native profiles")
 if __name__=='__main__': main()

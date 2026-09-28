@@ -2,7 +2,7 @@
   "id": "yangshipin.cn",
   "module": "yangshipin",
   "alias": "cmg",
-  "version": 2,
+  "version": 3,
   "hosts": [
     "yangshipin.cn"
   ],

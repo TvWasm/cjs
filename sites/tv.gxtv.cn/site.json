@@ -2,7 +2,7 @@
   "id": "tv.gxtv.cn",
   "module": "gxtv",
   "alias": "gxtv",
-  "version": 2,
+  "version": 3,
   "hosts": [
     "tv.gxtv.cn"
   ],
