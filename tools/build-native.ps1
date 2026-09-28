@@ -10,6 +10,7 @@ foreach ($nativeProfile in $profiles) {
   $ndkBuild = Join-Path $ndkRoot 'ndk-build.cmd'
   if (!(Test-Path -LiteralPath $ndkBuild)) { throw "Missing NDK: $ndkRoot" }
   foreach ($directory in $sites) {
+    if ($nativeProfile.sites -and $nativeProfile.sites -notcontains $directory.Name) { continue }
     $config = Get-Content -Raw -LiteralPath (Join-Path $directory.FullName 'site.json') | ConvertFrom-Json
     $jniRoot = Join-Path $directory.FullName 'native'
     $buildRoot = Join-Path $projectRoot "build/$($directory.Name)/$($nativeProfile.id)-$($nativeProfile.ndk)-clang"

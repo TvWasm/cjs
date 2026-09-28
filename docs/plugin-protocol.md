@@ -19,6 +19,7 @@ sites/<domain>/
   dist/armeabi-v7a/<module>.so   # API 14+, r17c Clang
   dist/armv7-perf/<module>.so   # API 19+, r25c Clang
   dist/arm64-v8a/<module>.so       # API 21+, r30 Clang
+  dist/x86/<module>.so          # API 14+, r17c Clang
 ```
 
 The host still requires `catalog.json` for discovery and channel routing; per-site

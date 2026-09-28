@@ -72,6 +72,20 @@ class PublishingTests(unittest.TestCase):
         (self.site / 'dist/armv7-perf/cctv.so').write_bytes(b'truncated')
         self.tool('verify_plugin.py', success=False)
 
+    def test_native_profile_can_be_limited_to_selected_sites(self):
+        profiles_path = self.root / 'native/profiles.json'
+        profiles = json.loads(profiles_path.read_text())
+        next(profile for profile in profiles if profile['id'] == 'x86')['sites'] = ['other.example']
+        profiles_path.write_text(json.dumps(profiles), encoding='utf-8')
+        config_path = self.site / 'site.json'
+        config = json.loads(config_path.read_text())
+        config['version'] += 1
+        config_path.write_text(json.dumps(config), encoding='utf-8')
+        self.tool('build_plugin.py')
+        self.tool('verify_plugin.py')
+        manifest = json.loads((self.site / 'plugin.json').read_text())
+        self.assertNotIn('x86', {item['abi'] for item in manifest['files']})
+
     def test_manifest_cannot_escape_root(self):
         self.tool('build_plugin.py')
         path = self.site / 'plugin.json'

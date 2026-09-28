@@ -59,7 +59,8 @@ def main():
         dist=site/'dist'
         runtime_path=dist/'runtime.json'; runtime_bytes=compact(runtime)
         files=[artifact(runtime_path,'runtime.json','all',runtime_bytes)]
-        for profile in json.loads((ROOT/'native/profiles.json').read_text('utf-8')):
+        profiles=json.loads((ROOT/'native/profiles.json').read_text('utf-8'))
+        for profile in (p for p in profiles if not p.get('sites') or site.name in p['sites']):
             library=cfg['module']+'.so'
             item=artifact(dist/profile['directory']/library,library,profile['abi'])
             item.update(profile=profile['id'], minSdk=profile['minSdk'], ndk=profile['ndk'])

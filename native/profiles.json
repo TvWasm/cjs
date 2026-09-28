@@ -19,5 +19,15 @@
     "minSdk": 21,
     "ndk": "r30",
     "directory": "arm64-v8a"
+  },
+  {
+    "id": "x86",
+    "abi": "x86",
+    "minSdk": 14,
+    "ndk": "r17c",
+    "directory": "x86",
+    "sites": [
+      "tv.cctv.com"
+    ]
   }
 ]
