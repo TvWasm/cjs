@@ -4,25 +4,25 @@
 
 ## 选择规则
 
-| 应用进程 ABI | Android API | profile | 工具链 | 当前站点 |
-| --- | --- | --- | --- | --- |
-| armeabi-v7a | 14–18 | armv7-base | r17c Clang | 全部 |
-| armeabi-v7a | 19+ | armv7-perf | r25c Clang | 全部 |
-| arm64-v8a | 21+ | arm64 | r30 Clang | 全部 |
-| x86 | 14+ | x86 | r17c Clang | 仅 `tv.cctv.com` |
+| 应用进程 ABI | Android API | profile | 工具链 |
+| --- | --- | --- | --- |
+| armeabi-v7a | 14–18 | armv7-base | r17c Clang |
+| armeabi-v7a | 19+ | armv7-perf | r25c Clang |
+| arm64-v8a | 21+ | arm64 | r30 Clang |
+| x86 | 14+ | x86 | r17c Clang |
 
 64 位手机安装 32 位 APK 时选择 ARMv7 包，不能根据设备支持的最高 ABI 加载 ARM64 SO。
 四档分别是插件包，并非要求发布四个 APK；ARM32 APK 按 API 选择基础或性能插件。
-`native/profiles.json` 是构建配置，profile 可以通过 `sites` 限定发布站点。当前只有 CCTV 发布 x86 库；
-央视频和广西卫视仍只发布三个 ARM profile，待上游提供 x86 文件后再开启。当前共发布十个原生库。
+`native/profiles.json` 是构建配置，profile 也可以通过 `sites` 限定发布站点。当前三个网站均发布
+ARMv7 base、ARMv7 perf、ARM64 和 x86，共十二个原生库。
 
 ## 清单与缓存
 
 目录、站点清单和 runtime 的 `protocol` 为 5。普通 Ku9 JS 不受此变更影响；
 `jsApi: cjs-v4` 继续表示原有 JS 入参语义，不是清单协议版本。
 
-一个站点清单包含公共 `runtime.json` 和该站点可用 profile 的 SO。CCTV 当前有五个文件，
-央视频和广西卫视各有四个文件。例如原生条目：
+一个站点清单包含公共 `runtime.json` 和该站点可用 profile 的 SO。当前每个站点都有五个文件。
+例如原生条目：
 
 ```json
 {"name":"cctv.so","abi":"armeabi-v7a","profile":"armv7-perf","minSdk":19,"ndk":"r25c","url":"https://your-host.example/cjs/sites/tv.cctv.com/dist/armv7-perf/cctv.so","sha256":"<文件SHA256>"}
@@ -62,12 +62,12 @@ python tools/test_plugin_tools.py
 | 7.1.1，API 25，小米 6 | ARM64 / r30 | 三站点通过 |
 | 7.1.1，API 25，小米 6，覆盖为 32 位 APK | ARM32 / r25c perf | 三站点通过 |
 | 4.0.4，强制替换为 r25c perf | 绕过生产选择规则的实验 | 加载央视网库失败 |
-| 9，API 28，x86_64 模拟器 | 32 位 x86 loader / r17c | CCTV SO 可 `dlopen` |
+| 9，API 28，x86_64 模拟器 | 32 位 x86 loader / r17c | 三站点 SO 均可 `dlopen` |
 
 测试覆盖真实设备上通过本地 HTTP 下载、完整性校验、原生加载、央视网固定分片解密、
 央视频固定分片解密及签名、广西 AES/重排已知答案测试。央视网和央视频输出 SHA-256 与既有基准一致。
 广西使用合成测试分片；本轮没有逐个在线直播验证画面、声音和首帧时间，不能将此表解释为全链路直播验收。
-x86 行只验证 CCTV 库的 ELF32/i386、动态依赖和 Android linker 加载；当时安装的宿主 APK 仍为
+x86 行只验证 ELF32/i386、动态依赖和 Android linker 加载；当时安装的宿主 APK 仍为
 `armeabi-v7a` 进程，因此不将该行解释为 x86 宿主的 JNI 或播放链路验收。
 
 表中四种 ARM 正常组合均再次启动测试进程复用缓存，HTTP 请求列表为空。测试进程执行的单次耗时包含输入读取，

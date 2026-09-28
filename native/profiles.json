@@ -25,9 +25,6 @@
     "abi": "x86",
     "minSdk": 14,
     "ndk": "r17c",
-    "directory": "x86",
-    "sites": [
-      "tv.cctv.com"
-    ]
+    "directory": "x86"
   }
 ]
