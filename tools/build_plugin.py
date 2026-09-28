@@ -71,7 +71,11 @@ def main():
             old=json.loads(previous.read_text('utf-8'))
             old_version=old['version']
             fingerprint=lambda items: {(f['name'],f['abi'],f.get('profile')):f['sha256'] for f in items}
-            if cfg['version'] < old_version or (cfg['version'] == old_version and fingerprint(old['files']) != fingerprint(files)):
+            old_files=fingerprint(old['files']); new_files=fingerprint(files)
+            changed_existing=any(new_files.get(key) != digest for key,digest in old_files.items())
+            added=set(new_files)-set(old_files)
+            invalid_addition=any(abi == 'all' or profile is None for _,abi,profile in added)
+            if cfg['version'] < old_version or (cfg['version'] == old_version and (changed_existing or invalid_addition)):
                 raise ValueError(f"{site.name}: increase version before changing published script/SO bytes")
         outputs[runtime_path]=runtime_bytes
         outputs[site/'plugin.json']=compact(manifest)

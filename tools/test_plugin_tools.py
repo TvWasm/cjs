@@ -72,6 +72,16 @@ class PublishingTests(unittest.TestCase):
         (self.site / 'dist/armv7-perf/cctv.so').write_bytes(b'truncated')
         self.tool('verify_plugin.py', success=False)
 
+    def test_additive_native_profile_does_not_require_version_bump(self):
+        manifest_path = self.site / 'plugin.json'
+        manifest = json.loads(manifest_path.read_text())
+        manifest['files'] = [item for item in manifest['files'] if item.get('profile') != 'x86']
+        manifest_path.write_text(json.dumps(manifest), encoding='utf-8')
+        self.tool('build_plugin.py')
+        self.tool('verify_plugin.py')
+        rebuilt = json.loads(manifest_path.read_text())
+        self.assertIn('x86', {item['abi'] for item in rebuilt['files']})
+
     def test_native_profile_can_be_limited_to_selected_sites(self):
         profiles_path = self.root / 'native/profiles.json'
         profiles = json.loads(profiles_path.read_text())

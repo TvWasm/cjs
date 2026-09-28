@@ -63,7 +63,7 @@ catalog.json                 # 构建生成：所有网站的目录
 | `id` | 网站标识，与 `sites` 下目录名完全一致 |
 | `module` | 不带 `.so` 后缀的独立原生模块名，发布该站点配置的原生 profile |
 | `alias` | 根目录 `.cjs` 文件名，不带后缀；仓库内唯一 |
-| `version` | 正整数；脚本、运行配置或 SO 内容改变就递增 |
+| `version` | 正整数；脚本、运行配置或已发布 SO 内容改变就递增；只新增 ABI/profile 时保持不变 |
 | `hosts` | 展开后网页所属的域名；不含协议和路径 |
 | `engine` | 宿主已有播放引擎，如 `hls`；不能任意新增字符串来增加宿主能力 |
 | `qualities` | 必须有 `high`，最多增加 `medium`、`low`；值是供应方参数 |
@@ -126,7 +126,8 @@ python tools/verify_plugin.py --base-url https://your-host.example.test/cjs
 按站点隔离不代表可以删除此索引。根目录重复的 `plugin.json` 已移除，构建不再生成；
 如果曾手动配置该旧地址，请改为 `catalog.json`。各网站下的 `plugin.json` 是安装文件清单，必须保留。
 
-脚本或 SO 内容改变但没有提高版本号时，构建工具会拒绝生成清单。
+脚本或已发布 SO 内容改变但没有提高版本号时，构建工具会拒绝生成清单。
+只新增 ABI/profile 且 runtime 与已发布 SO 字节不变时，可保持原版本号，避免其他 ABI 客户端下载不变的文件。
 不要手工修改 `dist/runtime.json` 或用相同版本号覆盖已发布内容。
 仅修改频道别名/参数路由时可用 `--catalog-only`；该选项不会重建站点运行文件。
 改变原生模块名时应使用新的站点标识或安排客户端迁移，不要在已有站点中直接重命名已加载的库。

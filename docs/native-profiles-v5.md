@@ -51,7 +51,8 @@ python tools/test_plugin_tools.py
 
 站点实际标识为 `tv.cctv.com`、`tv.gxtv.cn`、`yangshipin.cn`。
 脚本固定使用 Clang；构建缓存按站点、profile、NDK 隔离，避免复用旧 GCC 产物。
-本次央视网 v3、广西 v2、央视频 v2；内容修改后继续递增版本，不能覆盖已发布版本。
+本次央视网 v3、广西 v2、央视频 v2；x86 作为新增 profile 不改变站点版本。
+已发布 runtime 或 SO 内容修改后仍必须递增版本，不能覆盖既有字节。
 
 ## 本地验证结果
 
