@@ -88,6 +88,8 @@ typedef struct emval_handle {
 static __thread w2c_env g_env;
 static __thread w2c_cctv__h5e g_module;
 static __thread int g_runtime_initialized;
+static __thread u32 g_nal_workspace;
+static __thread u32 g_nal_workspace_capacity;
 static __thread int g_ready;
 static __thread int g_session_started;
 static __thread emval_handle g_emval_handles[64];
@@ -490,6 +492,8 @@ void w2c_env_0x5F(struct w2c_env* env, u32 a, u32 b, u32 c) {
 }
 
 static int reset_module_state(void) {
+  g_nal_workspace = 0;
+  g_nal_workspace_capacity = 0;
   uint32_t* dynamic_top;
   size_t relocation_index;
   memset(&g_module, 0, sizeof(g_module));
@@ -629,8 +633,17 @@ static int decrypt_nal(const uint8_t* nal, size_t nal_length,
   snprintf(g_current_update_tag, sizeof(g_current_update_tag), "%s", tag);
   g_wasm_stage = "idle";
   g_wasm_stage = "nal-malloc";
-  u32 data_address = w2c_cctv__h5e_Da(&g_module,
-      (u32) nal_length + (u32) host_length + NAL_MEMORY_EXTEND);
+  u32 required_capacity = (u32) nal_length + (u32) host_length + NAL_MEMORY_EXTEND;
+  if (g_nal_workspace_capacity < required_capacity) {
+    if (g_nal_workspace != 0) {
+      w2c_cctv__h5e_Ca(&g_module, g_nal_workspace);
+      g_nal_workspace = 0;
+      g_nal_workspace_capacity = 0;
+    }
+    g_nal_workspace = w2c_cctv__h5e_Da(&g_module, required_capacity);
+    if (g_nal_workspace != 0) g_nal_workspace_capacity = required_capacity;
+  }
+  u32 data_address = g_nal_workspace;
   g_wasm_stage = "idle";
   uint8_t* data = env_pointer(&g_env, data_address,
       nal_length + host_length + NAL_MEMORY_EXTEND);
@@ -654,6 +667,8 @@ static int decrypt_nal(const uint8_t* nal, size_t nal_length,
   if (output_length > nal_length + host_length + NAL_MEMORY_EXTEND) {
     g_wasm_stage = "nal-free";
     w2c_cctv__h5e_Ca(&g_module, data_address);
+    g_nal_workspace = 0;
+    g_nal_workspace_capacity = 0;
     g_wasm_stage = "idle";
     return 0;
   }
@@ -661,13 +676,14 @@ static int decrypt_nal(const uint8_t* nal, size_t nal_length,
   if (*result == NULL) {
     g_wasm_stage = "nal-free";
     w2c_cctv__h5e_Ca(&g_module, data_address);
+    g_nal_workspace = 0;
+    g_nal_workspace_capacity = 0;
     g_wasm_stage = "idle";
     return 0;
   }
   memcpy(*result, data, output_length);
   *result_length = output_length;
   g_wasm_stage = "nal-free";
-  w2c_cctv__h5e_Ca(&g_module, data_address);
   g_wasm_stage = "idle";
   return 1;
 }
@@ -1079,6 +1095,8 @@ Java_com_bu_cc_tv_NativeH5eDecryptor_releaseThreadContext(JNIEnv* env, jclass cl
   memset(&g_env, 0, sizeof(g_env));
   memset(&g_module, 0, sizeof(g_module));
   g_runtime_initialized = 0;
+  g_nal_workspace = 0;
+  g_nal_workspace_capacity = 0;
   g_ready = 0;
   g_session_started = 0;
   g_should_decrypt = 0;

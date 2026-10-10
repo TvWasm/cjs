@@ -45,6 +45,10 @@ https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/hndyjyfw.txt
 
 ## 开发
 
+`dev` 分支的[央视网优化版测试方法](docs/cctv-dev.md)：
+使用支持分支来源自动发现的测试包，直接导入本分支的 `cctv.m3u` 或 `cctv.txt`，
+应用内目录地址保持原样。
+
 [开发入门](docs/developer-guide.md) · [JS 接口](docs/javascript-api.md) · [安装与更新协议](docs/plugin-protocol.md) · [原生构建配置](docs/native-profiles-v5.md)
 
 ## 免责声明

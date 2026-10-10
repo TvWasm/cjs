@@ -1,0 +1,21 @@
+央视网 dev 测试,#genre#
+CCTV-1 综合,https://raw.githubusercontent.com/TvWasm/cjs/dev/cctv.cjs?id=cctv1
+CCTV-2 财经,https://raw.githubusercontent.com/TvWasm/cjs/dev/cctv.cjs?id=cctv2
+CCTV-3 综艺,https://raw.githubusercontent.com/TvWasm/cjs/dev/cctv.cjs?id=cctv3
+CCTV-4 中文国际（亚）,https://raw.githubusercontent.com/TvWasm/cjs/dev/cctv.cjs?id=cctv4
+CCTV-5 体育,https://raw.githubusercontent.com/TvWasm/cjs/dev/cctv.cjs?id=cctv5
+CCTV-6 电影,https://raw.githubusercontent.com/TvWasm/cjs/dev/cctv.cjs?id=cctv6
+CCTV-7 国防军事,https://raw.githubusercontent.com/TvWasm/cjs/dev/cctv.cjs?id=cctv7
+CCTV-8 电视剧,https://raw.githubusercontent.com/TvWasm/cjs/dev/cctv.cjs?id=cctv8
+CCTV-9 纪录,https://raw.githubusercontent.com/TvWasm/cjs/dev/cctv.cjs?id=cctvjilu
+CCTV-10 科教,https://raw.githubusercontent.com/TvWasm/cjs/dev/cctv.cjs?id=cctv10
+CCTV-11 戏曲,https://raw.githubusercontent.com/TvWasm/cjs/dev/cctv.cjs?id=cctv11
+CCTV-12 社会与法,https://raw.githubusercontent.com/TvWasm/cjs/dev/cctv.cjs?id=cctv12
+CCTV-13 新闻,https://raw.githubusercontent.com/TvWasm/cjs/dev/cctv.cjs?id=cctv13
+CCTV-14 少儿,https://raw.githubusercontent.com/TvWasm/cjs/dev/cctv.cjs?id=cctvchild
+CCTV-15 音乐,https://raw.githubusercontent.com/TvWasm/cjs/dev/cctv.cjs?id=cctv15
+CCTV-16 奥林匹克,https://raw.githubusercontent.com/TvWasm/cjs/dev/cctv.cjs?id=cctv16
+CCTV-17 农业农村,https://raw.githubusercontent.com/TvWasm/cjs/dev/cctv.cjs?id=cctv17
+CCTV-5+ 体育赛事,https://raw.githubusercontent.com/TvWasm/cjs/dev/cctv.cjs?id=cctv5plus
+CCTV-4 中文国际（欧）,https://raw.githubusercontent.com/TvWasm/cjs/dev/cctv.cjs?id=cctveurope
+CCTV-4 中文国际（美）,https://raw.githubusercontent.com/TvWasm/cjs/dev/cctv.cjs?id=cctvamerica
