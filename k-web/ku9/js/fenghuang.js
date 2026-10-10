@@ -1,29 +1,46 @@
-/**
- * 根据凤凰风直播 ID 获取真实视频播放地址。
- * 酷9会把 { url, name } 传给 main；网络请求必须通过 ku9 桥接完成。
- */
+/* 凤凰秀电视直播。ES5 / 同步 Ku9，使用官网匿名播放接口获取临时签名。 */
 function main(item) {
-    var sourceUrl = item && item.url ? String(item.url) : String(item || "");
-    var match = sourceUrl.match(/[?&]id=([^&#]+)/);
-    var videoId = match ? decodeURIComponent(match[1]) : sourceUrl;
-    if (!videoId) {
-        throw new Error("缺少凤凰直播 id");
+    var source = item && item.url ? String(item.url) : String(item || '');
+    var id = ku9.getQuery(source, 'id') || 'pcc';
+    // 兼容已导入的旧频道表；这个风直播活动 ID 已不再代表中文台。
+    if (id === '1016529') id = 'pcc';
+    var channels = [
+        ['pcc', 'f7f48462-9b13-485b-8101-7b54716411ec', '凤凰中文台'],
+        ['pin', '7c96b084-60e1-40a9-89c5-682b994fb680', '凤凰资讯台'],
+        ['phk', '15e02d92-1698-416c-af2f-3e9a872b4d78', '凤凰香港台']
+    ];
+    var channel = null;
+    for (var i = 0; i < channels.length; i++) {
+        if (id === channels[i][0] || id === channels[i][1]) channel = channels[i];
     }
-
-    var pageUrl = "https://flive.ifeng.com/live/" + encodeURIComponent(videoId) + ".html";
-    var html = ku9.get(pageUrl, {
-        "Referer": "https://jx.ifeng.com/zhibo",
-        "Accept": "text/html,application/xhtml+xml"
+    if (!channel) throw new Error('凤凰频道参数无效：' + id);
+    var quality = ku9.getQuery(source, 'quality') || 'hd';
+    if (quality !== 'hd' && quality !== 'sd') throw new Error('凤凰清晰度参数无效：' + quality);
+    var page = 'https://www.fengshows.com/live';
+    var userAgent = 'Mozilla/5.0';
+    var response = ku9.request('https://m.fengshows.com/api/v3/hub/live/auth-url?live_qa='
+            + quality + '&live_id=' + channel[1], 'GET', {
+        'Referer': page, 'Origin': 'https://www.fengshows.com',
+        'User-Agent': userAgent, 'Accept': 'application/json'
     });
-    if (!html) {
-        throw new Error("凤凰直播页面请求失败");
+    if (!response || Number(response.code) !== 200) {
+        throw new Error('凤凰播放接口请求失败：HTTP ' + (response ? response.code : 0));
     }
-
-    // 兼容页面中的普通斜杠、转义斜杠、Unicode 转义及 HTML 实体。
-    html = html.replace(/\\u002F/gi, "/").replace(/\\\//g, "/").replace(/&amp;/g, "&");
-    var urlMatch = html.match(/https?:\/\/[^\s"'<>]+\.(?:m3u8|mp4)(?:\?[^\s"'<>]*)?/i);
-    if (!urlMatch) {
-        throw new Error("凤凰直播页面中未找到视频地址");
+    var data;
+    try { data = JSON.parse(response.body); }
+    catch (error) { throw new Error('凤凰播放接口未返回有效 JSON'); }
+    if (!data || String(data.status) !== '0') {
+        throw new Error('凤凰播放接口异常：' + (data && data.message || '未知错误'));
     }
-    return urlMatch[0];
+    var url = data.data && data.data.live_url;
+    var match = typeof url === 'string' && url.match(
+            /^https?:\/\/[^\/\s?#]+(\/live\/0701(pcc|pin|phk)[0-9]+\.flv\?[^\s#]+)$/i);
+    if (!match || match[2] !== channel[0]
+            || !/[?&]txSecret=[a-f0-9]{32}(?:&|$)/i.test(url)
+            || !/[?&]txTime=[a-f0-9]+(?:&|$)/i.test(url)) {
+        throw new Error('凤凰频道缺少有效的签名播放地址：' + channel[2]);
+    }
+    // 官网配置的 HTTPS 电视 CDN；三台均提供 FLV。保留接口签名，不缓存过期 URL。
+    // 不能将 .flv 直接改为 .m3u8，当前 HLS 端点返回 403。
+    return {url: 'https://tlive.fengshows.com' + match[1], referer: page, userAgent: userAgent};
 }

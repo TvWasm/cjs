@@ -27,6 +27,14 @@ https://raw.githubusercontent.com/TvWasm/cjs/main/gxtv.m3u
 
 ### Ku9 频道表
 
+凤凰秀（中文台、资讯台、香港台）：
+
+```text
+https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/fenghuang.txt
+```
+
+[脚本参数及验证说明](docs/fenghuang-ku9.md)。
+
 河南党员教育服务网（远程党员教育及六个河南电视频道）：
 
 ```text

@@ -1,2 +1,4 @@
 凤凰频道,#genre#
-凤凰中文台,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/fenghuang.js?id=1016529
+凤凰中文台,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/fenghuang.js?id=pcc
+凤凰资讯台,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/fenghuang.js?id=pin
+凤凰香港台,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/fenghuang.js?id=phk
