@@ -25,6 +25,16 @@ https://raw.githubusercontent.com/TvWasm/cjs/main/gxtv.m3u
 
 频道可用性及清晰度以源站实际提供为准。
 
+### Ku9 频道表
+
+河南党员教育服务网（远程党员教育及六个河南电视频道）：
+
+```text
+https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/hndyjyfw.txt
+```
+
+[脚本参数及验证说明](docs/hndyjyfw-ku9.md)。
+
 ## 开发
 
 [开发入门](docs/developer-guide.md) · [JS 接口](docs/javascript-api.md) · [安装与更新协议](docs/plugin-protocol.md) · [原生构建配置](docs/native-profiles-v5.md)

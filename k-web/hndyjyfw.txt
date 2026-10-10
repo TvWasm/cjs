@@ -1,0 +1,8 @@
+河南党员教育服务网,#genre#
+远程党员教育,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/hndyjyfw.js?id=ycjy
+河南卫视,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/hndyjyfw.js?id=hnws
+河南都市,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/hndyjyfw.js?id=hnds
+河南民生,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/hndyjyfw.js?id=hnms
+河南梨园,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/hndyjyfw.js?id=hnly
+河南乡村,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/hndyjyfw.js?id=hnxc
+河南武术世界,https://raw.githubusercontent.com/TvWasm/cjs/main/k-web/ku9/js/hndyjyfw.js?id=hnwssj
