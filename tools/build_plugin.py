@@ -79,7 +79,8 @@ def main():
                 raise ValueError(f"{site.name}: increase version before changing published script/SO bytes")
         outputs[runtime_path]=runtime_bytes
         outputs[site/'plugin.json']=compact(manifest)
-        probe=dict(v=cfg['version'],id=site.name,manifest=base+'/plugin.json')
+        # Imported descriptors are self-contained; no catalog URL allowlist is needed.
+        probe=dict(v=cfg['version'],id=site.name,manifest=base+'/plugin.json',site=entry)
         outputs[site/'version.cjs']=compact(probe)
         # Keep familiar root URL entry points, each now points to one site only.
         outputs[ROOT/(cfg['alias']+'.cjs')]=compact(probe)
